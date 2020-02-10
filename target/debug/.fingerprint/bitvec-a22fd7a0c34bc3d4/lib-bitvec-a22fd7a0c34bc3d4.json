@@ -1,0 +1,1 @@
+{"rustc":1240946752080948661,"features":"[\"alloc\", \"atomic\", \"default\", \"std\"]","target":16504161372226262180,"profile":14672114853574311971,"path":6709418249440410234,"deps":[],"local":[{"CheckDepInfo":{"dep_info":"debug/.fingerprint/bitvec-a22fd7a0c34bc3d4/dep-lib-bitvec-a22fd7a0c34bc3d4"}}],"rustflags":[],"metadata":6379644401324879731}

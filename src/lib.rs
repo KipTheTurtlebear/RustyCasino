@@ -31,20 +31,32 @@ impl Deck {
         self.0.is_empty()
     }
 
+    ///draw card - gets rid of the card 'at the top' from the deck and returns it
+    pub fn draw(&mut self) -> i32 {
+        let a = self.0.pop();
+        let card: i32 = a.unwrap();
+        card
+    }
+
     ///displays every card and their corresponding suite
     pub fn show_deck(&self) {
         let deck = &self.0;
 
         for card in deck {
-            if *card <= 13 {
-                println!("{} of Spades", card);
-            } else if *card > 13 && *card <= 26 {
-                println!("{} of Clubs", card - 13);
-            } else if *card > 26 && *card <= 39 {
-                println!("{} of Hearts", card - 26);
-            } else {
-                println!("{} of Diamonds", card - 39)
-            }
+            print_card(*card);
         }
+    }
+}
+
+///takes an i32 value from 1-52 and determines what suite it is
+pub fn print_card(card: i32) {
+    if card <= 13 {
+        println!("{} of Spades", card);
+    } else if card > 13 && card <= 26 {
+        println!("{} of Clubs", card - 13);
+    } else if card > 26 && card <= 39 {
+        println!("{} of Hearts", card = 26);
+    } else {
+        println!("{} of Diamonds", card - 39);
     }
 }

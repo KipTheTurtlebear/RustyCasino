@@ -1,1 +1,1 @@
-/u/prikim/Rust/GitRepos/RustyCasino/target/debug/libdeck.rlib: /u/prikim/Rust/GitRepos/RustyCasino/src/lib.rs
+C:\Users\micha\OneDrive\Documents\GitHub\RustyCasino\target\debug\libdeck.rlib: C:\Users\micha\OneDrive\Documents\GitHub\RustyCasino\src\lib.rs

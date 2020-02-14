@@ -1,7 +1,7 @@
-mod deck;
-use crate::deck::*;
+use rusty_casino::*;
 
 fn main() {
+    /*
     let mut deck: Deck = Deck::new_deck();
     println!("------ {} cards in deck ------", deck.len());
     deck.show_deck();
@@ -14,4 +14,7 @@ fn main() {
     print_card(deck.draw());
     println!("---- new deck ----");
     deck.show_deck();
+    */
+
+    rusty_casino::Rusty_Casino();
 }

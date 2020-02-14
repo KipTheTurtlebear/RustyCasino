@@ -39,14 +39,14 @@ impl Deck {
 
     ///displays every card and their corresponding suite
     pub fn show_deck(&self) {
-                                            let deck = &self.0;
+        let deck = &self.0;
 
         for card in deck {
             print_card(*card);
         }
     }
 }
-                             
+
 ///takes an i32 value from 1-52 and determines what suite it is
 pub fn print_card(card: i32) {
     if card == 1 {
@@ -54,7 +54,7 @@ pub fn print_card(card: i32) {
     } else if card > 1 && card <= 10 {
         println!("{} of Spades", card);
     } else if card == 11 {
-            println!("Jack of Spades");
+        println!("Jack of Spades");
     } else if card == 12 {
         println!("Queen of Spades");
     } else if card == 13 {

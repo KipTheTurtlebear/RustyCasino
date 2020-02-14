@@ -1,5 +1,6 @@
-//extern crate deck;
-use deck::*;
+mod deck;
+use crate::deck::*;
+
 fn main() {
     let mut deck: Deck = Deck::new_deck();
     println!("------ {} cards in deck ------", deck.len());

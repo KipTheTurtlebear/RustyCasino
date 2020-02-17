@@ -3,6 +3,7 @@ mod deck;
 mod player;
 use crate::high_low::player::*;
 use crate::high_low::deck::*;
+use text_io::read;
 
 //test to ensure this module linking stuff is working correctly
 pub fn high_low(){

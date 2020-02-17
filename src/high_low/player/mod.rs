@@ -11,7 +11,7 @@ impl Player{
     pub fn new_player() -> Self{
         //don't really know if we need this
         // Player((0..0).collect())
-        new_player(Vec::new(), 0)
+        Player(Vec::new(), 0)
     }
 
     ///Add card to player's hand

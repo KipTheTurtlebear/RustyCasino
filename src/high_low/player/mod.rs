@@ -33,6 +33,30 @@ impl Player{
        }
         self
     }
+
+    ///removes chips upon loss
+    pub fn lose_chips(mut self, lose_amount:i32) -> Self{
+        //do we want negative chips? let player buy in ?
+
+        self.1 = self.1 - lose_amount;
+        self
+    }
+
+
+    ///Checks if player has enough chips to bet
+    pub fn check_chips(self, to_bet: i32) -> bool{
+    
+        //use this function where betting is handled. 
+        //if this returns false, user does not have enough chips to bet
+        //so they need to change bet amount
+        if to_bet > self.1{
+            false;
+        }
+
+        else{
+            true;
+        }
+    }
 }
 
 

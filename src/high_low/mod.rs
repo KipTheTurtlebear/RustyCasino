@@ -10,16 +10,39 @@ pub fn high_low(){
 
     //create player
     let mut player: Player = Player::new_player();
-
+    let mut choice = 0;
+    let mut game :char = 'y';
+    let mut result = 0;
     println!("high-low game starting");
 
     //deck of 52 cards created
     let mut deck: Deck = Deck::new_deck();
+    while game == 'y' {
+        deck.shuffle_deck();
 
-    deck.shuffle_deck();
+        let temp_card1 = deck.draw();
+        println!("The card is a ");
+        deck.print_card(temp_card1);
 
-    let temp_card = deck.draw();
-    println!("you drew a {}", temp_card);
-    player.add_to_hand(temp_card); 
+        while choice != 1 && choice != 2 {
+            println!("Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n");
+            choice = read!();
+        }
 
+        let temp_card2 = deck.draw();
+        println!("The card is a ");
+        deck.print_card(temp_card2);
+
+        if deck.get_value(tempcard2) > deck.get_value(tempcard1) {
+            result = 1; //Card was higher
+        }
+
+        if choice == result {
+            println!("You win!");
+        }
+        else { println!("You lose :("); }
+
+        println!("Continue? y/n");
+        game = read!();
+    }
 }

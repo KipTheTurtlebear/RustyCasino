@@ -26,7 +26,7 @@ pub fn high_low(){
         //Draw and print card the player sees
         let temp_card1 = deck.draw();
         println!("The card is a ");
-        Deck::print_card(temp_card1);
+        print_card(temp_card1);
 
         //Player chooses if it's higher or lower
         while choice != 1 && choice != 2 {
@@ -37,14 +37,14 @@ pub fn high_low(){
         //Draw 2nd card
         let temp_card2 = deck.draw();
         println!("The card is a ");
-        Deck::print_card(temp_card2);
+        print_card(temp_card2);
 
         //Compare 1st and 2nd card
-        if Deck::get_value(temp_card2) > Deck::get_value(temp_card1) {
+        if get_value(temp_card2) > get_value(temp_card1) {
             result = 1; //Card was higher
-        } else if Deck::get_value(temp_card2) < Deck::get_value(temp_card1) {
+        } else if get_value(temp_card2) < get_value(temp_card1) {
             result = 2; //Card was lower
-        } else if Deck::get_value(temp_card2) == Deck::get_value(temp_card1) {
+        } else if get_value(temp_card2) == get_value(temp_card1) {
             result = 3; //Card was the same
         }
 

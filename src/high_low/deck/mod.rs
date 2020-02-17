@@ -45,6 +45,26 @@ impl Deck {
             Deck::print_card(*card);
         }
     }
+}
+
+//had to move these functions out of the deck impl because they dont contain
+//a 'self' so it doesn't count as a part of the deck struct implementation.
+//still usable as long as the deck crate is imported.
+
+    pub fn get_value (card: i32) -> i32 {
+        let mut value = card;
+        if card >= 1 && card <= 13 {
+            value = card;
+        } else if card >= 14 && card <= 26 {
+            value = card - 13;
+        } else if card >= 27 && card <= 39 {
+            value = card - 26;
+        } else if card >= 40 && card <= 52 {
+            value = card - 39;
+        }
+        value
+    }
+
 
     ///takes an i32 value from 1-52 and determines what suite it is
     pub fn print_card(card: i32) {
@@ -91,19 +111,5 @@ impl Deck {
         }
     }
 
-    pub fn get_value (card: i32) -> i32 {
-        let mut value = card;
-        if card >= 1 && card <= 13 {
-            value = card;
-        } else if card >= 14 && card <= 26 {
-            value = card - 13;
-        } else if card >= 27 && card <= 39 {
-            value = card - 26;
-        } else if card >= 40 && card <= 52 {
-            value = card - 39;
-        }
-        value
-    }
 
-}
 

@@ -15,34 +15,49 @@ pub fn high_low(){
     let mut result = 0;
     println!("high-low game starting");
 
-    //deck of 52 cards created
-    let mut deck: Deck = Deck::new_deck();
+
+    // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
+        //Deck of 52 cards created
+        //Shuffle new deck every new game
+        let mut deck: Deck = Deck::new_deck();
         deck.shuffle_deck();
 
+        //Draw and print card the player sees
         let temp_card1 = deck.draw();
         println!("The card is a ");
-        deck.print_card(temp_card1);
+        Deck::print_card(temp_card1);
 
+        //Player chooses if it's higher or lower
         while choice != 1 && choice != 2 {
             println!("Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n");
             choice = read!();
         }
 
+        //Draw 2nd card
         let temp_card2 = deck.draw();
         println!("The card is a ");
-        deck.print_card(temp_card2);
+        Deck::print_card(temp_card2);
 
-        if deck.get_value(tempcard2) > deck.get_value(tempcard1) {
+        //Compare 1st and 2nd card
+        if Deck::get_value(temp_card2) > Deck::get_value(temp_card1) {
             result = 1; //Card was higher
+        } else if Deck::get_value(temp_card2) < Deck::get_value(temp_card1) {
+            result = 2; //Card was lower
+        } else if Deck::get_value(temp_card2) == Deck::get_value(temp_card1) {
+            result = 3; //Card was the same
         }
 
-        if choice == result {
-            println!("You win!");
-        }
-        else { println!("You lose :("); }
+
+        if choice == result {println!("You win!");}
+        else if result == 3 {println!("Card was same value, it's a draw!");}
+        else {println!("You lose :("); }
+
+        //Reset choice
+        choice = 0;
 
         println!("Continue? y/n");
+
         game = read!();
     }
 }

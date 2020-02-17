@@ -22,7 +22,7 @@ pub fn high_low(){
 
         let temp_card1 = deck.draw();
         println!("The card is a ");
-        deck.print_card(temp_card1);
+        print_card(temp_card1);
 
         while choice != 1 && choice != 2 {
             println!("Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n");
@@ -31,9 +31,9 @@ pub fn high_low(){
 
         let temp_card2 = deck.draw();
         println!("The card is a ");
-        deck.print_card(temp_card2);
+        print_card(temp_card2);
 
-        if deck.get_value(tempcard2) > deck.get_value(tempcard1) {
+        if get_value(temp_card2) > get_value(temp_card1) {
             result = 1; //Card was higher
         }
 

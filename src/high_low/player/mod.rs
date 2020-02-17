@@ -50,11 +50,11 @@ impl Player{
         //if this returns false, user does not have enough chips to bet
         //so they need to change bet amount
         if to_bet > self.1{
-            false;
+            false
         }
 
         else{
-            true;
+            true
         }
     }
 }

@@ -22,6 +22,25 @@ impl Player{
         self
     }
 
+    ///Remove card from player's hand
+    pub fn remove_card(mut self, to_remove: i32) -> Self{
+        let mut count = 0;
+
+        for card in &self.0{
+        
+            if to_remove == *card{
+                //found first instance of card we want to remove
+                self.0.remove(count);
+                break;
+            }
+
+            //haven't found, so up the counter 
+            count += 1;
+        }
+        self
+    }
+
+
     pub fn add_chips(mut self, chips: i32) -> Self{
        match self.1.checked_add(chips) {
            Some(v) => {

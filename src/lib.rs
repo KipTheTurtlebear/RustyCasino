@@ -17,7 +17,7 @@ pub fn Rusty_Casino(){
     println!("\n\n\n\n");
     println!("\tAs you walk through the doors, you're approached by a dashing gentleman.");
     println!("\t\"Hello, my name is Reginald. It will be my pleasure to be your aide today\"");
-    println!("\t\"What may I call you today?\"\n");
+    println!("\t\"What may I call you?\"\n");
     println!("\nPlease enter your name below:\n");
     let mut name: String = read!();
     let mut textfile: String = name.clone();
@@ -34,9 +34,13 @@ pub fn Rusty_Casino(){
 
     match file.write_all(name.as_bytes()) {
         Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
-        Ok(_) => println!("\n\n\"Ah, {:?}, what a wonderful name.\"\n", name),
+        Ok(_) => println!("\n\n\t\"Ah, {:?}, what a wonderful name.\"\n", name),
     }
-    println!("\"There was a {:?} here the other day. Lost his house. I'm sure you'll do better though, eh?\"\n", name);
+    if &name == "Bart" {
+        println!("\t\"Oh heavens, it's you! The creators of this fine establishment would like to give you a bri-, I mean, a gift\"\n");
+    } else {
+        println!("\t\"There was a {:?} here the other day. Lost his house. I'm sure you'll do better though, eh?\"\n", name);
+    }
 
     while choice != 9 {
         println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n9: Leave Casino\n");

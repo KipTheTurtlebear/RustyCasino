@@ -7,8 +7,18 @@ use std::error::Error;
 
 pub fn Rusty_Casino(){
     let mut choice = 0;
-
-    println!("\tPlease enter your name:\n");
+    println!("\n\n\n\n");
+    println!("████████╗██╗  ██╗███████╗    ██████╗ ██╗   ██╗███████╗████████╗██╗   ██╗     ██████╗ █████╗ ███████╗██╗███╗   ██╗ ██████╗ ");
+    println!("╚══██╔══╝██║  ██║██╔════╝    ██╔══██╗██║   ██║██╔════╝╚══██╔══╝╚██╗ ██╔╝    ██╔════╝██╔══██╗██╔════╝██║████╗  ██║██╔═══██╗");
+    println!("   ██║   ███████║█████╗      ██████╔╝██║   ██║███████╗   ██║    ╚████╔╝     ██║     ███████║███████╗██║██╔██╗ ██║██║   ██║");
+    println!("   ██║   ██╔══██║██╔══╝      ██╔══██╗██║   ██║╚════██║   ██║     ╚██╔╝      ██║     ██╔══██║╚════██║██║██║╚██╗██║██║   ██║");
+    println!("   ██║   ██║  ██║███████╗    ██║  ██║╚██████╔╝███████║   ██║      ██║       ╚██████╗██║  ██║███████║██║██║ ╚████║╚██████╔╝");
+    println!("   ╚═╝   ╚═╝  ╚═╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝        ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ");
+    println!("\n\n\n\n");
+    println!("\tAs you walk through the doors, you're approached by a dashing gentleman.");
+    println!("\t\"Hello, my name is Reginald. It will be my pleasure to be your aide today\"");
+    println!("\t\"What may I call you today?\"\n");
+    println!("\nPlease enter your name below:\n");
     let mut name: String = read!();
     let mut textfile: String = name.clone();
     textfile.push_str(".txt");
@@ -24,11 +34,12 @@ pub fn Rusty_Casino(){
 
     match file.write_all(name.as_bytes()) {
         Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
-        Ok(_) => println!("Your name is: {:?}", name),
+        Ok(_) => println!("\n\n\"Ah, {:?}, what a wonderful name.\"\n", name),
     }
+    println!("\"There was a {:?} here the other day. Lost his house. I'm sure you'll do better though, eh?\"\n", name);
 
     while choice != 9 {
-        println!("Select which game you'd like to play:\n1: High Low\n9: Leave Casino\n");
+        println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n9: Leave Casino\n");
         choice = read!();
         if choice == 1 {
             high_low::high_low();

@@ -42,7 +42,7 @@ impl Deck {
         let deck = &self.0;
 
         for card in deck {
-            Deck::print_card(*card);
+            print_card(*card);
         }
     }
 }

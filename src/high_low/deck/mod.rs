@@ -65,6 +65,63 @@ impl Deck {
         value
     }
 
+    /// Returns a tuple containing the card's number value, name of suite, and unicode of suite
+    pub fn card_info(card: i32) -> (i32, String, char){
+
+    //get number value of card
+        let mut info:(i32, String, char) = (0, "empty".to_string(),'\u{26A0}');
+        info.0 = get_value(card);
+
+    //get name of suite
+        info.1 = get_suite(card);
+
+    //get unicode of suite
+        if info.1 == "Spades"{
+            info.2 = '\u{2660}';
+        }else if info.1 == "Clubs"{
+            info.2 = '\u{2663}';
+        }else if info.1 == "Hearts"{
+            info.2 = '\u{2665}';
+        }else{
+            info.2 = '\u{2666}';
+        }
+
+        info
+    }
+
+    pub fn print_value(card: i32){
+
+        let num = get_value(card);
+
+        if num >= 2 && num <= 10{
+            print!("{}", num);
+        }else if num == 1{
+            print!("A");
+        }else if num == 11{
+            print!("J");
+        }else if num == 12{
+            print!("Q");
+        }else if num == 13{
+            print!("K");
+        }
+    }
+
+
+    ///Returns the literal string name of the suite given by the card
+    pub fn get_suite(card: i32) -> String{
+  
+        if card >= 1 && card<= 13{
+            "Spades".to_string()  
+        }else if card >= 14 && card <= 26{
+            "Clubs".to_string()
+        }else if card >= 27 && card <= 39{
+            "Hearts".to_string()
+        }else{
+            "Diamonds".to_string()
+        }
+
+    }
+
 
     ///takes an i32 value from 1-52 and determines what suite it is
     pub fn print_card(card: i32) {

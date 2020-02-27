@@ -169,9 +169,15 @@ impl Deck {
 
     ///displays a single card
     pub fn display_single(card: i32){
-        println!("|{}  |", card);
+        print!("|");
+        print_value(card);
+        println!("  |");
+        
         println!("| {} |", card_info(card).2);
-        println!("|  {}|", card);
+
+        print!("|  ");
+        print_value(card);
+        println!("|");
     }
 
     ///displays the cards in the users hand with a 'picture'

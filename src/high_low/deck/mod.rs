@@ -122,7 +122,6 @@ impl Deck {
 
     }
 
-
     ///takes an i32 value from 1-52 and determines what suite it is
     pub fn print_card(card: i32) {
         if card == 1 {
@@ -167,6 +166,42 @@ impl Deck {
             println!("King of Diamonds")
         }
     }
+
+    ///displays a single card
+    pub fn display_single(card: i32){
+        println!("|{}  |", card);
+        println!("| {} |", card_info(card).2);
+        println!("|  {}|", card);
+    }
+
+    ///displays the cards in the users hand with a 'picture'
+    pub fn display_cards(cards: &Vec<i32>){
+
+        //display top layer
+        for card in cards{
+            print!("|");
+            print_value(*card);
+            print!("  |  ");
+        }
+
+        println!("");
+
+        //display middle layer
+        for card in cards{
+            print!("| {} |  ", card_info(*card).2);
+        }
+
+        println!("");
+
+        //display bottom layer
+        for card in cards{
+            print!("|  ");
+            print_value(*card);
+            print!("|  ");
+        }
+
+    }
+
 
 
 

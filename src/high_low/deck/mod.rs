@@ -42,7 +42,7 @@ impl Deck {
         let deck = &self.0;
 
         for card in deck {
-            Deck::print_card(*card);
+            print_card(*card);
         }
     }
 }
@@ -50,6 +50,14 @@ impl Deck {
 //had to move these functions out of the deck impl because they dont contain
 //a 'self' so it doesn't count as a part of the deck struct implementation.
 //still usable as long as the deck crate is imported.
+
+    pub fn get_total (deck: &Vec<i32>) -> i32 {
+        let mut total = 0;
+        for card in deck {
+            total = total + get_value(*card);
+        }
+        total
+    }
 
     pub fn get_value (card: i32) -> i32 {
         let mut value = card;

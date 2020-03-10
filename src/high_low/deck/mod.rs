@@ -51,6 +51,14 @@ impl Deck {
 //a 'self' so it doesn't count as a part of the deck struct implementation.
 //still usable as long as the deck crate is imported.
 
+    pub fn get_total (deck: &Vec<i32>) -> i32 {
+        let mut total = 0;
+        for card in deck {
+            total = total + get_value(*card);
+        }
+        total
+    }
+
     pub fn get_value (card: i32) -> i32 {
         let mut value = card;
         if card >= 1 && card <= 13 {

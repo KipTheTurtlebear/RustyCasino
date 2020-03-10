@@ -4,12 +4,121 @@ mod player;
 use crate::high_low::player::*;
 use crate::high_low::deck::*;
 use text_io::read;
+use std::fs::File;
+use std::io::{self, prelude::*, BufReader};
+use std::path::Path;
+use std::error::Error;
+
+pub fn blackjack(){
+
+    let mut player = Player::new_player();
+    let mut dealer = Player::new_player();
+    let chips = 100;
+
+    player.set_name("Player".to_string());
+    player.add_chips(chips);
+    let mut choice = 0;
+    let mut game :char = 'y';
+    let mut result = 0;
+    println!("high-low game starting");
+
+
+    // Game Loop: Continues until player chooses to exit the game
+    while game == 'y' {
+        //Deck of 52 cards created
+        //Shuffle new deck every new game
+        let mut deck: Deck = Deck::new_deck();
+        let mut hit: char = 'y';
+        deck.shuffle_deck();
+
+        println!("Dealing...");
+        player.add_to_hand(deck.draw());
+        println!("\nYour first card:");
+        player.show_hand();
+
+        dealer.add_to_hand(deck.draw());
+        println!("\nDealer's face-up card:");
+        dealer.show_hand();
+        println!("\nYour cards are:");
+        player.add_to_hand(deck.draw());
+        player.show_hand();
+
+        dealer.add_to_hand(deck.draw());
+
+        if get_total(&player.0) == 21 && get_total(&dealer.0) != 21 {
+            println!("Blackjack! Congrats, you win!")
+        }
+        else if get_total(&player.0) != 21 && get_total(&dealer.0) == 21 {
+            println!("Dealer got blackjack! You lose!")
+        }
+
+        else {
+            println!("Want another card? y/n");
+            hit = read!();
+
+
+            while (get_total(&player.0) <= 21) && (hit == 'y') {
+                println!("Want another card? y/n");
+                hit = read!();
+                player.add_to_hand(deck.draw());
+                player.show_hand();
+            }
+
+            if get_total(&player.0) > 21 {
+                println!("BUSTED! Sucks to suck yo, better luck next time.")
+            } else {
+                println!("Your final count is: {}", get_total(&player.0));
+                println!("Dealer is drawing:");
+                while get_total(&dealer.0) <= get_total(&player.0) {
+                    dealer.add_to_hand(deck.draw());
+                    dealer.show_hand();
+                }
+                println!("Dealer's final count is: {}", get_total(&dealer.0));
+                if get_total(&player.0) > get_total(&dealer.0) {
+                    println!("You win!");
+                } else if get_total(&player.0) < get_total(&dealer.0) {
+                    println!("You lose!");
+                } else {
+                    println!("It's a tie!")
+                }
+            }
+        }
+        println!("Do you want to play again?");
+        game = read!();
+    }
+}
 
 //test to ensure this module linking stuff is working correctly
 pub fn high_low(){
 
     //create player
     let mut player: Player = Player::new_player();
+    let path = Path::new("save.txt");
+    let display = path.display();
+    let file = match File::open(path) {
+        Err(why) => panic!("Couldn't open {}: {}", display, why.description()),
+        Ok(file) => file,
+    };
+    let reader = BufReader::new(file);
+   /* let mut iter = reader.lines();
+    let mut name = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "Player".to_string(),
+    };
+    let chips = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "100".to_string(),
+    };*/
+    let mut vec_lines = vec![];
+    for line in reader.lines() {
+        vec_lines.push(line.unwrap());
+    }
+    let name =  vec_lines[0].clone();
+
+    let chips = vec_lines[1].clone();
+
+    player.set_name(name);
+    player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
     let mut game :char = 'y';
     let mut result = 0;

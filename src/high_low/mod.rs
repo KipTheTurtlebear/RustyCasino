@@ -11,20 +11,20 @@ use std::error::Error;
 
 pub fn blackjack(){
 
-    let mut player = Player::new_player();
-    let mut dealer = Player::new_player();
-    let chips = 100;
-
-    player.set_name("Player".to_string());
-    player.add_chips(chips);
     let mut choice = 0;
     let mut game :char = 'y';
     let mut result = 0;
-    println!("high-low game starting");
+    println!("Blackjack game starting...\n");
 
 
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
+        let mut player = Player::new_player();
+        let mut dealer = Player::new_player();
+        let chips = 100;
+
+        player.set_name("Player".to_string());
+        player.add_chips(chips);
         //Deck of 52 cards created
         //Shuffle new deck every new game
         let mut deck: Deck = Deck::new_deck();
@@ -58,10 +58,10 @@ pub fn blackjack(){
 
 
             while (get_total(&player.0) <= 21) && (hit == 'y') {
-                println!("Want another card? y/n");
-                hit = read!();
                 player.add_to_hand(deck.draw());
                 player.show_hand();
+                println!("Want another card? y/n");
+                hit = read!();
             }
 
             if get_total(&player.0) > 21 {
@@ -70,20 +70,25 @@ pub fn blackjack(){
                 println!("Your final count is: {}", get_total(&player.0));
                 println!("Dealer is drawing:");
                 while get_total(&dealer.0) <= get_total(&player.0) {
+                    print!("\nDealer's cards:\n");
                     dealer.add_to_hand(deck.draw());
                     dealer.show_hand();
                 }
                 println!("Dealer's final count is: {}", get_total(&dealer.0));
-                if get_total(&player.0) > get_total(&dealer.0) {
-                    println!("You win!");
-                } else if get_total(&player.0) < get_total(&dealer.0) {
-                    println!("You lose!");
+                if get_total(&dealer.0) > 21 {
+                    println!("\nDealer busted, you win!\n");
                 } else {
-                    println!("It's a tie!")
+                    if get_total(&player.0) > get_total(&dealer.0) {
+                        println!("\nYou win!\n");
+                    } else if get_total(&player.0) < get_total(&dealer.0) {
+                        println!("\nYou lose!\n");
+                    } else {
+                        println!("\nIt's a tie!\n")
+                    }
                 }
             }
         }
-        println!("Do you want to play again?");
+        println!("\nDo you want to play again?\n");
         game = read!();
     }
 }

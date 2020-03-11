@@ -51,6 +51,48 @@ impl Deck {
 //a 'self' so it doesn't count as a part of the deck struct implementation.
 //still usable as long as the deck crate is imported.
 
+    pub fn get_total (deck: &Vec<i32>) -> i32 {
+        let mut value = 0;
+        let mut aces = 0;
+        let mut total = 0;
+        for card in deck {
+            value = get_bj_value(*card);
+            if value == 11 {
+                aces = aces + 1;
+            }
+            total = total + value;
+        }
+        while total > 21 && aces > 0 {
+            total = total - 10;
+            aces = aces - 1;
+        }
+        total
+    }
+
+    pub fn get_bj_value (card: i32) -> i32 {
+        let mut value = card;
+        if card == 1 || card == 14 || card == 27 || card == 40 {
+            value = 11;
+        }
+        if card >= 2 && card <= 10 {
+            value = card;
+        } else if card >=11 && card <= 13 {
+            value = 10;
+        } else if card >= 15 && card <= 23 {
+            value = card - 13;
+        } else if card >= 24 && card <= 26 {
+            value = 10;
+        } else if card >= 28 && card <= 36 {
+            value = card - 26;
+        } else if card >= 37 && card <= 39 {
+            value = 10;
+        } else if card >= 41 && card <= 49 {
+            value = card - 39;
+        } else if card >= 50 && card <= 52 {
+            value = 10;
+        }
+        value
+    }
     pub fn get_value (card: i32) -> i32 {
         let mut value = card;
         if card >= 1 && card <= 13 {

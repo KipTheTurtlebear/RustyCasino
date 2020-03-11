@@ -141,6 +141,7 @@ pub fn high_low(){
         let temp_card1 = deck.draw();
         println!("The card is a ");
         print_card(temp_card1);
+        display_single(temp_card1);
 
         //Player chooses if it's higher or lower
         while choice != 1 && choice != 2 {
@@ -152,6 +153,7 @@ pub fn high_low(){
         let temp_card2 = deck.draw();
         println!("The card is a ");
         print_card(temp_card2);
+        display_single(temp_card2);
 
         //Compare 1st and 2nd card
         if get_value(temp_card2) > get_value(temp_card1) {

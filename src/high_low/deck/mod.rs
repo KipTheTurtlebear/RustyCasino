@@ -12,6 +12,17 @@ impl Deck {
         Deck((1..=52).collect())
     }
 
+    /// Creates an empty deck - used to create multiple decks
+    pub fn empty_deck() -> Self{
+        Deck(Vec::new())
+    }
+
+    /// Adds a card to the deck - used to create multiple decks
+    pub fn add_card(&mut self, card: i32) -> &Self{
+        self.0.push(card);
+        self
+    }
+
     /// Shuffle the deck
     pub fn shuffle_deck(&mut self) -> &Self {
         let mut rng = rand::thread_rng();

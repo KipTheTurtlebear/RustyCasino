@@ -177,3 +177,33 @@ pub fn high_low(){
         game = read!();
     }
 }
+
+//war!
+pub fn war(){
+
+    //let bet_amount:i32 = 0; ?
+    let mut game: char = 'y';
+
+    println!("War game starting...\n");
+
+    //initialize / set up the game
+
+    let mut deck: Deck = Deck::new_deck();
+    deck.shuffle_deck();
+
+    //split deck between player and dealer
+    let mut player_deck: Deck = Deck::empty_deck();
+    let mut dealer_deck: Deck = Deck::empty_deck();
+
+    //deal cards to each person until 'deck' is empty
+    while !deck.is_empty(){
+        player_deck.add_card(deck.draw());
+        dealer_deck.add_card(deck.draw());
+    }
+
+
+
+
+    //start game loop
+
+}

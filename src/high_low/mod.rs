@@ -181,7 +181,7 @@ pub fn high_low(){
 //war!
 pub fn war(){
 
-    //let bet_amount:i32 = 0; ?
+    let bet_amount:i32 = 5; 
     let mut game: char = 'y';
 
     println!("War game starting...\n");
@@ -201,9 +201,89 @@ pub fn war(){
         dealer_deck.add_card(deck.draw());
     }
 
+    //TODO: Have Reginald tell player the game is gonna start, and how it works
+    
+        //after every 'round' the player can choose to either
+        //continue
+        //increase bet
+        //decrease bet
+        //but only in increments of 5 or 10 depending on how Reginald is feeling
+    println!("What would you like the starting bet be? Default is 5 chips");
 
-
-
+    //1 = dealer, 2 = player, 3 = tie
+    let mut winner = 1;
+    let mut choice = 0;
+    
     //start game loop
+    while game == 'y'{
+    
+        //draw
+        let mut d_card = dealer_deck.draw();
+        let mut p_card = player_deck.draw();
+
+        //determine winner
+        if get_value(d_card) == get_value(p_card){
+            winner = 3;
+            while winner == 3{
+                println!("\n\n\tIt's a tie! My.. would you like to forfeit or start a war?\n1: War\n2:Forfeit");
+                choice = read!();
+                
+                if choice == 2{
+                    println!("\n Ah.. that's too bad");
+                    break;
+                }else{
+                    //burn 3 cards each
+                    dealer_deck.draw();
+                    dealer_deck.draw();
+                    dealer_deck.draw();
+                    d_card = dealer_deck.draw();
+
+                    player_deck.draw();
+                    player_deck.draw();
+                    player_deck.draw();
+                    p_card = player_deck.draw();
+
+                    if get_value(d_card) == get_value(p_card){
+                        winner = 3;
+                    }
+                    else if get_value(d_card)>get_value(p_card){
+                        winner = 1;
+                    }else{
+                        winner = 2;
+                    }
+                }
+
+            }
+        }
+        else if get_value(d_card) > get_value(p_card){
+            winner = 1;
+        }
+        else{
+            winner = 2;
+        }
+
+
+        //display
+        println!("   Reginald's Card");
+        display_single(d_card);
+        if winner == 1{
+            println!("\nDealer Wins!\n");
+        }
+        else if winner == 2{
+            println!("\nYou Win!\n");
+        }
+        else if winner == 3{
+            println!("\n You forfeited the tie..\n");
+        }
+        println!("   Your Card");
+        display_single(p_card);
+        //continue / change bet
+        println!("Would you like to go another round? y/n");
+        game = read!();
+    }
+
+
+
+
 
 }

@@ -80,6 +80,7 @@ impl Deck {
         total
     }
 
+    ///Returns the card's number value - Faces = 10
     pub fn get_bj_value (card: i32) -> i32 {
         let mut value = card;
         if card == 1 || card == 14 || card == 27 || card == 40 {
@@ -104,6 +105,8 @@ impl Deck {
         }
         value
     }
+    
+    ///Returns the card's number value
     pub fn get_value (card: i32) -> i32 {
         let mut value = card;
         if card >= 1 && card <= 13 {

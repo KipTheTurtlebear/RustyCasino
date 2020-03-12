@@ -57,7 +57,7 @@ pub fn Rusty_Casino(){
 
     while choice != 9 {
 
-        println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n2: Blackjack\n3: War\n9: Leave Casino\n");
+        println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n2: Blackjack\n3: War\n4: Red Dog Poker\n9: Leave Casino\n");
         choice = read!();
         if choice == 1 {
             high_low::high_low();
@@ -67,6 +67,9 @@ pub fn Rusty_Casino(){
         }
         else if choice == 3{
             high_low::war();
+        }
+        else if choice == 4{
+            high_low::red_dog_poker();
         }
     }
 

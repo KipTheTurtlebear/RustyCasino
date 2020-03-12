@@ -211,7 +211,7 @@ pub fn war(){
     println!("What would you like the starting bet be? Default is 5 chips");
 
     //1 = dealer, 2 = player, 3 = tie
-    let mut winner = 1;
+    let mut winner = 3;
     let mut choice = 0;
     
     //start game loop
@@ -222,68 +222,110 @@ pub fn war(){
         let mut p_card = player_deck.draw();
 
         //determine winner
-        if get_value(d_card) == get_value(p_card){
-            winner = 3;
-            while winner == 3{
-                println!("\n\n\tIt's a tie! My.. would you like to forfeit or start a war?\n1: War\n2:Forfeit");
-                choice = read!();
-                
-                if choice == 2{
-                    println!("\n Ah.. that's too bad");
-                    break;
-                }else{
-                    //burn 3 cards each
-                    dealer_deck.draw();
-                    dealer_deck.draw();
-                    dealer_deck.draw();
-                    d_card = dealer_deck.draw();
-
-                    player_deck.draw();
-                    player_deck.draw();
-                    player_deck.draw();
-                    p_card = player_deck.draw();
-
-                    if get_value(d_card) == get_value(p_card){
-                        winner = 3;
-                    }
-                    else if get_value(d_card)>get_value(p_card){
-                        winner = 1;
-                    }else{
-                        winner = 2;
-                    }
-                }
-
-            }
-        }
-        else if get_value(d_card) > get_value(p_card){
-            winner = 1;
-        }
-        else{
-            winner = 2;
+        
+        while winner == 3{
+            //if tie keep looping, 
+            winner = War_Winner(bet_amount, d_card, p_card);
         }
 
-
-        //display
-        println!("   Reginald's Card");
-        display_single(d_card);
-        if winner == 1{
-            println!("\nDealer Wins!\n");
-        }
-        else if winner == 2{
-            println!("\nYou Win!\n");
-        }
-        else if winner == 3{
-            println!("\n You forfeited the tie..\n");
-        }
-        println!("   Your Card");
-        display_single(p_card);
-        //continue / change bet
         println!("Would you like to go another round? y/n");
         game = read!();
     }
+}
 
+///Used to handle displaying the winner - returns a number representing who won / tie
+pub fn War_Winner(bet:i32, d_card:i32, p_card:i32)-> i32{
+//0 means forfeit tie
+//1 means dealer wins
+//2 means player wins
+//3 means its war time
+    let mut winner = 0;
+    let mut choice = 1;
+    println!("   Reginald's Card");
+    display_single(d_card);
+
+    if get_value(d_card) == get_value(p_card){
+        //its a tie!
+        println!(" .. Oh?");
+        println!("   Your Card");
+        display_single(p_card);
+
+        println!("\n\n\tIt's a tie! Well.. would you like to forfeit or start a war?\n1: War\n2: Forfeit");
+        choice = read!();
+
+        if choice == 2 {
+            //forfeit tie - lose half
+            println!("\n Ah.. That's too bad.");
+            println!("\nThat means I get half");
+            0
+        }
+        else{
+            //war!
+            println!("War! Now we burn three cards");
+            3
+        }
+    }
+
+    else if get_value(d_card) > get_value(p_card){
+        //dealer wins
+        println!(" Dealer Wins!");
+        println!("   Your Card");
+        display_single(p_card);
+        1
+    }
+    else{
+        //player wins
+        println!(" You Win!");
+        println!("   Your Card");
+        display_single(p_card);
+        2
+    }
+
+}
+
+
+///Red Dog Poker
+pub fn red_dog_poker(){
+
+
+    println!("Red Dog Poker Starting..");
+    let deck:Deck = Deck::new_deck();
+
+    let mut game: char = 'y';
+
+    let mut button: char = '\0';
+
+    println!("Would you like to hear the rules? y/n?");
+    game = read!();
+
+    if game == 'y'{
+        println!("You're allowed to bet 2 times per round.\nThe first time is when you're dealt 2 cards.");
+        println!("Then depending on those two, you either double down or call.");
+        println!("if you call, you get whatever payout for the first two cards.\nif you double down, you get dealt a 3rd card.");
+
+        println!("Heres how the cards work");
+
+        println!("\n\t [ a ] [ b ] [ c ] say a, b, and c represent the first, second and third cards.");
+        println!("\n\t You lose when a and b are not the same, and aren't consecutive, and when c is either higher or lower than either a or b");
+        println!("Otherwise you want to look if the cards are\n1: The Same\n2: Consecutive\n3: Or if c is in between a and b");
+        println!("If all three are the same, payout is 1:11\nIf a and b are the same, but c is different, it's a push
+            \nIf a and b are consecutive, then you push and aren't dealt a 3rd card\nIf a and b aren't consecutive, and they aren't the same,
+            then it's a spread. If c lands in between a and b, your payout depends on the size of that spread.");
+
+        println!("\nAre you ready to play? [type anything and hit enter to continue]");
+        button = read!();
+    }
+
+
+    print!("\n------ Let's Play Red Dog Poker! ------\n");
 
 
 
 
 }
+
+
+
+
+
+

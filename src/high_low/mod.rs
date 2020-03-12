@@ -292,7 +292,7 @@ pub fn red_dog_poker(){
     let deck:Deck = Deck::new_deck();
 
     let mut game: char = 'y';
-
+    let mut bet_amount:i32 = 10;
     let mut button: char = '\0';
 
     println!("Would you like to hear the rules? y/n?");
@@ -320,7 +320,31 @@ pub fn red_dog_poker(){
     print!("\n------ Let's Play Red Dog Poker! ------\n");
 
 
+    deck.shuffle_deck();
 
+
+    println!("\nWhat would you like to bet? (Default 10)");
+    
+    //deal player two cards
+    //display hand
+    //
+    //ask if they'd like to double down, or call
+    //
+    //if call{
+    //  process payout
+    //  discard cards
+    //}else if double down{
+    //
+    //  deal third card to player
+    //  display hand
+    //  process payout
+    //  discard cards
+    //}
+    //
+    //^put in game loop
+    //
+    //process payout could be like a function that handles the cases
+    
 
 }
 

@@ -111,9 +111,9 @@ pub fn blackjack() {
         game = read!();
     }
 }
-
 //test to ensure this module linking stuff is working correctly
-pub fn high_low() {
+pub fn high_low(){
+
     //create player
     let mut player: Player = Player::new_player();
     let path = Path::new("save.txt");
@@ -123,9 +123,7 @@ pub fn high_low() {
         Ok(file) => file,
     };
     let reader = BufReader::new(file);
-
     let mut iter = reader.lines();
-
     let mut name = match iter.next() {
         Some(T) => T.unwrap(),
         None => "Player".to_string(),
@@ -133,48 +131,20 @@ pub fn high_low() {
     let chips = match iter.next() {
         Some(T) => T.unwrap(),
         None => "100".to_string(),
-
-    };*/
-    let mut vec_lines = vec![];
-    for line in reader.lines() {
-        vec_lines.push(line.unwrap());
-    }
-    let name = vec_lines[0].clone();
-
-    let chips = vec_lines[1].clone();
-};
-
+    };
 
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
-    let mut game: char = 'y';
+    let mut game :char = 'y';
     let mut result = 0;
     let mut bet:i32 = 0;
     let mut double = true;
     println!("high-low game starting");
 
+
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
-
-        //Deck of 52 cards created
-        //Shuffle new deck every new game
-        let mut deck: Deck = Deck::new_deck();
-        deck.shuffle_deck();
-
-        //Draw and print card the player sees
-        let temp_card1 = deck.draw();
-        println!("The card is a ");
-        print_card(temp_card1);
-        display_single(temp_card1);
-
-        //Player chooses if it's higher or lower
-        while choice != 1 && choice != 2 {
-            println!(
-                "Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n"
-            );
-            choice = read!();
-
         let mut exceed = true;
         println!("You have: {} chips\n", player.1);
         while exceed {
@@ -189,10 +159,8 @@ pub fn high_low() {
         //returns true if numeric
         /*
         let is_num = bet.parse::<i32>().is_ok();
-
         if is_num {
             let check = player.check_chips(bet);
-
         }
         while !is_num || !check {
             println!("You have: {} chips\n", player.1);
@@ -203,9 +171,6 @@ pub fn high_low() {
             if is_num {
                 let check = player.check_chips(bet);
             }
-
-
-
         }
         */
         //subtract bet
@@ -228,8 +193,6 @@ pub fn high_low() {
                 choice = read!();
             }
 
-
-
             //Draw 2nd card
             let temp_card2 = deck.draw();
             println!("The card is a ");
@@ -244,7 +207,6 @@ pub fn high_low() {
             } else if get_value(temp_card2) == get_value(temp_card1) {
                 result = 3; //Card was the same
             }
-
 
 
             if choice == result {
@@ -277,7 +239,6 @@ pub fn high_low() {
     }
     write_file(player.2, player.1);
 }
-
 //war!
 pub fn war() {
     let bet_amount: i32 = 5;

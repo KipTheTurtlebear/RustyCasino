@@ -1,7 +1,5 @@
 mod high_low;
 use crate::high_low::player::*;
-use text_io::read;
-
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::io::prelude::*;

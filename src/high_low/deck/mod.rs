@@ -80,9 +80,9 @@ pub fn get_total(deck: &Vec<i32>) -> i32 {
     for card in deck {
         let value = get_bj_value(*card);
         if value == 11 {
-            aces = aces + 1;
+            aces +=1;
         }
-        total = total + value;
+        total += value;
     }
     while total > 21 && aces > 0 {
         total = total - 10;
@@ -93,28 +93,42 @@ pub fn get_total(deck: &Vec<i32>) -> i32 {
 
 ///Returns the card's number value - Faces = 10
 pub fn get_bj_value(card: i32) -> i32 {
-    let mut value = card;
+    //let value = card;
     if card == 1 || card == 14 || card == 27 || card == 40 {
-        value = 11;
+        //value = 11;
+        11
     }
-    if card >= 2 && card <= 10 {
-        value = card;
+    else if card >= 2 && card <= 10 {
+        //value = card;
+        card
     } else if card >= 11 && card <= 13 {
-        value = 10;
+        //value = 10;
+        10
     } else if card >= 15 && card <= 23 {
-        value = card - 13;
+        //value = card - 13;
+        card-13
     } else if card >= 24 && card <= 26 {
-        value = 10;
+        //value = 10;
+        10
     } else if card >= 28 && card <= 36 {
-        value = card - 26;
+        //value = card - 26;
+        card - 26
     } else if card >= 37 && card <= 39 {
-        value = 10;
+        //value = 10;
+        10
     } else if card >= 41 && card <= 49 {
-        value = card - 39;
+        //value = card - 39;
+        card - 39
+    /*
     } else if card >= 50 && card <= 52 {
-        value = 10;
+        //value = 10;
+        10
     }
-    value
+    */
+    }else{
+        10
+    }
+    //value
 }
 
 ///Returns the card's number value
@@ -260,7 +274,7 @@ pub fn display_cards(cards: &Vec<i32>) {
         print!("  |  ");
     }
 
-    println!("");
+    println!();
 
     //display middle layer
     for card in cards {
@@ -270,7 +284,7 @@ pub fn display_cards(cards: &Vec<i32>) {
             print!("| {} |  ", card_info(*card).2);
         }
     }
-    println!("");
+    println!();
 
     //display bottom layer
     for card in cards {

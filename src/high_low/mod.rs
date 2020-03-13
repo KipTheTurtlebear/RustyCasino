@@ -34,7 +34,7 @@ pub fn blackjack() {
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
 
-//    let mut choice = 0;
+    //    let mut choice = 0;
     let mut game: char = 'y';
     //let mut result = 0;
     println!("Blackjack game starting...\n");
@@ -72,7 +72,7 @@ pub fn blackjack() {
             println!("Dealer got blackjack! You lose!")
         } else {
             println!("Want another card? y/n");
-            let mut hit:char  = read!();
+            let mut hit: char = read!();
 
             while (get_total(&player.0) <= 21) && (hit == 'y') {
                 player.add_to_hand(deck.draw());
@@ -95,14 +95,12 @@ pub fn blackjack() {
                 println!("Dealer's final count is: {}", get_total(&dealer.0));
                 if get_total(&dealer.0) > 21 {
                     println!("\nDealer busted, you win!\n");
+                } else if get_total(&player.0) > get_total(&dealer.0) {
+                    println!("\nYou win!\n");
+                } else if get_total(&player.0) < get_total(&dealer.0) {
+                    println!("\nYou lose!\n");
                 } else {
-                    if get_total(&player.0) > get_total(&dealer.0) {
-                        println!("\nYou win!\n");
-                    } else if get_total(&player.0) < get_total(&dealer.0) {
-                        println!("\nYou lose!\n");
-                    } else {
-                        println!("\nIt's a tie!\n")
-                    }
+                    println!("\nIt's a tie!\n")
                 }
             }
         }
@@ -211,7 +209,7 @@ pub fn high_low() {
 
             if choice == result {
                 println!("You win!");
-                bet = bet * 2;
+                bet *= 2;
                 println!("Double or nothing? y/n\n");
                 game = read!();
                 if game == 'y' {
@@ -340,14 +338,13 @@ pub fn war() {
         } else if winner == 2 {
             println!("Nice! Here's {} chips", bet_amount + bet_amount);
             player.add_chips(bet_amount + bet_amount);
-
         }
 
         println!("\n\tYour Chips: {}", player.1);
         println!("Would you like to go another round? y/n");
         game = read!();
     }
-    
+
     write_file(player.2, player.1);
 }
 
@@ -367,7 +364,7 @@ pub fn war_winner(d_card: i32, p_card: i32) -> i32 {
         display_single(p_card);
 
         println!("\n\n\tIt's a tie! Well.. would you like to forfeit or start a war?\n1: War\n2: Forfeit");
-        let choice:char = read!();
+        let choice: char = read!();
 
         if choice == '2' {
             //forfeit tie - lose half
@@ -427,7 +424,7 @@ pub fn red_dog_poker() {
     let mut bet_amount: i32 = 10;
 
     println!("Would you like to hear the rules? y/n?");
-    let mut game:char  = read!();
+    let mut game: char = read!();
 
     if game == 'y' {
         println!("You're allowed to bet 2 times per round.\nThe first time is when you're dealt 2 cards.");
@@ -484,7 +481,7 @@ pub fn red_dog_poker() {
         } else {
             //ask if they'd like to double down, or call
             println!("Would you like to: \n1: double down\n2: call");
-            let button:char = read!();
+            let button: char = read!();
 
             if button == '1' {
                 //double down

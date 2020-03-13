@@ -1,13 +1,12 @@
 //player module
 use crate::high_low::deck;
-use std::path::Path;
+use std::error::Error;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
-use std::error::Error;
+use std::path::Path;
 
 #[derive(Debug, Default, Clone)]
 pub struct Player(pub Vec<i32>, pub i32, pub String); //Hand of cards, chips, name
-
 
 impl Player {
     ///Create the player
@@ -23,10 +22,6 @@ impl Player {
 
     ///Add card to player's hand
     pub fn add_to_hand(&mut self, card: i32) {
-
-
-
-
         //push to hand
         self.0.push(card);
     }
@@ -75,7 +70,6 @@ impl Player {
 
     ///removes chips upon loss
     pub fn lose_chips(&mut self, lose_amount: i32) {
-
         //do we want negative chips? let player buy in ?
 
         self.1 = self.1 - lose_amount;
@@ -84,8 +78,7 @@ impl Player {
     ///Checks if player has enough chips to bet
 
     pub fn check_chips(&self, to_bet: i32) -> bool {
-
-        //use this function where betting is handled. 
+        //use this function where betting is handled.
 
         //if this returns false, user does not have enough chips to bet
         //so they need to change bet amount
@@ -97,16 +90,15 @@ impl Player {
     }
 }
 
-
-pub fn write_file(name:String, chips:i32) {
+pub fn write_file(name: String, chips: i32) {
     let mut textfile: String = name.clone();
     textfile.push_str(".txt");
 
-        // Create file and save path
+    // Create file and save path
     let path = Path::new("save.txt");
     let display = path.display();
 
-        // Open the file in write-mode
+    // Open the file in write-mode
     let mut file = match File::create(&path) {
         Err(why) => panic!("Couldn't create {}: {}", display, why.description()),
         Ok(file) => file,
@@ -122,9 +114,4 @@ pub fn write_file(name:String, chips:i32) {
     };
 
     write!(file, "\n{}", chips);
-
 }
-
-
-
-

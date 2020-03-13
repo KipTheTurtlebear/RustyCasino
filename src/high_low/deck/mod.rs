@@ -80,7 +80,6 @@ pub fn get_total(deck: &Vec<i32>) -> i32 {
     total
 }
 
-
 ///Returns the card's number value - Faces = 10
 pub fn get_bj_value(card: i32) -> i32 {
     let mut value = card;
@@ -145,7 +144,6 @@ pub fn card_info(card: i32) -> (i32, String, char) {
     info
 }
 
-
 ///Returns the literal string name of the suite given by the card
 pub fn get_suite(card: i32) -> String {
     if card >= 1 && card <= 13 {
@@ -204,81 +202,69 @@ pub fn print_card(card: i32) {
     }
 }
 
+pub fn print_value(card: i32) {
+    let num = get_value(card);
 
-    pub fn print_value(card: i32){
-
-        let num = get_value(card);
-
-        if num >= 2 && num <= 10{
-            print!("{}", num);
-        }else if num == 1{
-            print!("A");
-        }else if num == 11{
-            print!("J");
-        }else if num == 12{
-            print!("Q");
-        }else if num == 13{
-            print!("K");
-        }
+    if num >= 2 && num <= 10 {
+        print!("{}", num);
+    } else if num == 1 {
+        print!("A");
+    } else if num == 11 {
+        print!("J");
+    } else if num == 12 {
+        print!("Q");
+    } else if num == 13 {
+        print!("K");
     }
+}
 
-
-    
-    ///displays a single card
-    pub fn display_single(card: i32){
-        print!("|");
-        if card == 10 || card == 23 || card == 36 || card == 49 {
-            print_value(card);
-            println!("  |");
-
-            println!("|  {} |", card_info(card).2);
-
-            print!("|  ");
-        }
-        else {
-            print_value(card);
-            println!("  |");
-
-            println!("| {} |", card_info(card).2);
-
-            print!("|  ");
-        }
+///displays a single card
+pub fn display_single(card: i32) {
+    print!("|");
+    if card == 10 || card == 23 || card == 36 || card == 49 {
         print_value(card);
-        println!("|");
+        println!("  |");
+
+        println!("|  {} |", card_info(card).2);
+
+        print!("|  ");
+    } else {
+        print_value(card);
+        println!("  |");
+
+        println!("| {} |", card_info(card).2);
+
+        print!("|  ");
+    }
+    print_value(card);
+    println!("|");
+}
+
+///displays the cards in the users hand with a 'picture'
+pub fn display_cards(cards: &Vec<i32>) {
+    //display top layer
+    for card in cards {
+        print!("|");
+        print_value(*card);
+        print!("  |  ");
     }
 
-    ///displays the cards in the users hand with a 'picture'
-    pub fn display_cards(cards: &Vec<i32>){
+    println!("");
 
-        //display top layer
-        for card in cards{
-            print!("|");
-            print_value(*card);
-            print!("  |  ");
+    //display middle layer
+    for card in cards {
+        if *card == 10 || *card == 23 || *card == 36 || *card == 49 {
+            print!("|  {} |  ", card_info(*card).2);
+        } else {
+            print!("| {} |  ", card_info(*card).2);
         }
-
-        println!("");
-
-        //display middle layer
-        for card in cards{
-            if *card == 10 || *card == 23 || *card == 36 || *card == 49 {
-                print!("|  {} |  ", card_info(*card).2);
-            }
-            else {
-                print!("| {} |  ", card_info(*card).2);
-            }
-        }
-        println!("");
-
-        //display bottom layer
-        for card in cards{
-            print!("|  ");
-            print_value(*card);
-            print!("|  ");
-        }
-
     }
+    println!("");
 
-
-
-
+    //display bottom layer
+    for card in cards {
+        print!("|  ");
+        print_value(*card);
+        print!("|  ");
+    }
+}

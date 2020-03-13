@@ -3,16 +3,14 @@ mod deck;
 pub(crate) mod player;
 use crate::high_low::deck::*;
 use crate::high_low::player::*;
+use std::cmp;
 use std::error::Error;
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
 use std::path::Path;
-use std::cmp;
 use text_io::read;
 
-
 pub fn blackjack() {
-
     //create player
     let mut player: Player = Player::new_player();
     let path = Path::new("save.txt");
@@ -113,8 +111,7 @@ pub fn blackjack() {
     }
 }
 //test to ensure this module linking stuff is working correctly
-pub fn high_low(){
-
+pub fn high_low() {
     //create player
     let mut player: Player = Player::new_player();
     let path = Path::new("save.txt");
@@ -137,12 +134,11 @@ pub fn high_low(){
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
-    let mut game :char = 'y';
+    let mut game: char = 'y';
     let mut result = 0;
-    let mut bet:i32 = 0;
+    let mut bet: i32 = 0;
     let mut double = true;
     println!("high-low game starting");
-
 
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
@@ -150,12 +146,14 @@ pub fn high_low(){
         println!("You have: {} chips\n", player.1);
         while exceed {
             println!("How much would you like to bet?\n");
-            let input:String = read!();
+            let input: String = read!();
             let g = match input.parse::<i32>() {
                 Err(e) => exceed = true,
                 Ok(f) => bet = f,
             };
-            if player.check_chips(bet) {exceed = false;}
+            if player.check_chips(bet) {
+                exceed = false;
+            }
         }
         //returns true if numeric
         /*
@@ -190,7 +188,9 @@ pub fn high_low(){
 
             //Player chooses if it's higher or lower
             while choice != 1 && choice != 2 {
-                println!("Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n");
+                println!(
+                    "Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n"
+                );
                 choice = read!();
             }
 
@@ -209,7 +209,6 @@ pub fn high_low(){
                 result = 3; //Card was the same
             }
 
-
             if choice == result {
                 println!("You win!");
                 bet = bet * 2;
@@ -217,16 +216,14 @@ pub fn high_low(){
                 game = read!();
                 if game == 'y' {
                     double = true;
-                }
-                else {
+                } else {
                     double = false;
                     println!("You've won {} chips!", bet);
                     player.add_chips(bet)
                 }
             } else if result == 3 {
                 println!("Card was same value, it's a draw!");
-            }
-            else {
+            } else {
                 println!("You lose :(");
             }
         }
@@ -355,8 +352,29 @@ pub fn war_winner(bet: i32, d_card: i32, p_card: i32) -> i32 {
 ///Red Dog Poker
 pub fn red_dog_poker() {
     println!("Red Dog Poker Starting..");
-    
-    //grab player's chips
+
+    //create player
+    let mut player: Player = Player::new_player();
+    let path = Path::new("save.txt");
+    let display = path.display();
+
+    let file = match File::open(path) {
+        Err(why) => panic!("Couldn't open {}: {}", display, why.description()),
+        Ok(file) => file,
+    };
+    let reader = BufReader::new(file);
+    let mut iter = reader.lines();
+    let mut name = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "Player".to_string(),
+    };
+    let chips = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "100".to_string(),
+    };
+
+    player.set_name(name);
+    player.add_chips(chips.parse::<i32>().unwrap());
 
     let mut deck: Deck = Deck::new_deck();
 
@@ -392,10 +410,10 @@ pub fn red_dog_poker() {
 
     deck.shuffle_deck();
 
-    let mut player: Player = Player::new_player();
-
     while game == 'y' {
         println!("\nWhat would you like to bet? (Default 10)");
+
+        player.lose_chips(bet_amount);
 
         //deal player two cards
         player.add_to_hand(deck.draw());
@@ -405,22 +423,38 @@ pub fn red_dog_poker() {
         display_cards(&player.0);
 
         //if first two cards are consecutive, push
-        
-        if player.0[0] +1 == player.0[1] || player.0[0] - 1 == player.0[1]{
-            println!("It's a push, so nothing happens");     
-        }
-        else{
+
+        if player.0[0] + 1 == player.0[1] || player.0[0] - 1 == player.0[1] {
+            println!("It's a push, so nothing happens");
+            player.add_chips(bet_amount);
+        } else {
             //ask if they'd like to double down, or call
             println!("Would you like to: \n1: double down\n2: call");
             button = read!();
 
             if button == 1 {
+                //double down
+                player.lose_chips(bet_amount);
+
                 player.add_to_hand(deck.draw());
+                print!("\n\tBetting: {} chips", bet_amount + bet_amount);
                 println!("\n\tYour Hand:");
                 display_cards(&player.0);
+                let hand: Vec<i32> = [player.0[0], player.0[1], player.0[2]].to_vec();
+
+                //process payout
+                let mut payout = bet_amount + rdp_payout(hand, bet_amount);
+
+                if payout == 0 {
+                    //this means you lost
+                    println!("ooh, Bust. You lose those chips");
+                } else {
+                    //add another bet_amount to payout since it was doubled
+                    payout += bet_amount;
+                    println!("You've earned {} chips", payout);
+                    player.add_chips(payout);
+                }
             }
-            //process payout
-            //discard cards
         }
 
         player.discard_hand();
@@ -431,42 +465,33 @@ pub fn red_dog_poker() {
 }
 
 ///takes the player object and checks its hand to determine what the payout is
-pub fn rdp_payout(player:Player, bet_amount:i32) -> i32{
+pub fn rdp_payout(hand: Vec<i32>, bet_amount: i32) -> i32 {
     //should only be called when player has 3 cards
-    let a = &player.0[0];
-    let b = &player.0[1];
-    let c = &player.0[2];
+    let a = hand[0];
+    let b = hand[1];
+    let c = hand[2];
 
     //not same, not in spread
-    if a != b && c > cmp::max(a, b) && c < cmp::min(a, b){
+    if a != b && c > cmp::max(a, b) && c < cmp::min(a, b) {
         -bet_amount
     }
-        
     //all 3 same
-    else if a == b && c == b{
+    else if a == b && c == b {
         bet_amount + 11
     }
-
     //spread
-    else{
-        let spread = cmp::max(a,b) - cmp::min(a,b);
+    else {
+        let spread = cmp::max(a, b) - cmp::min(a, b);
 
         //only one possible card ex: if a = 11 and b = 9, c has to be 10 to win
-        if spread == 2{
+        if spread == 2 {
             bet_amount + 5
-        }
-        else if spread == 3{
+        } else if spread == 3 {
             bet_amount + 4
-        }
-        else if spread == 4{
+        } else if spread == 4 {
             bet_amount + 2
-        }
-        else{
+        } else {
             bet_amount + 1
         }
     }
 }
-
-
-
-

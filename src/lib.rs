@@ -22,38 +22,38 @@ pub fn Rusty_Casino() {
     println!("\nPlease enter your name below:\n");
     let mut name: String = read!();
     let mut chips = 100;
-/*
-    let mut textfile: String = name.clone();
-    textfile.push_str(".txt");
+    /*
+        let mut textfile: String = name.clone();
+        textfile.push_str(".txt");
 
-    // Create file and save path
-    let path = Path::new("save.txt");
-    let display = path.display();
+        // Create file and save path
+        let path = Path::new("save.txt");
+        let display = path.display();
 
-    // Open the file in write-mode
-    let mut file = match File::create(&path) {
-        Err(why) => panic!("Couldn't create {}: {}", display, why.description()),
-        Ok(file) => file,
-    };
+        // Open the file in write-mode
+        let mut file = match File::create(&path) {
+            Err(why) => panic!("Couldn't create {}: {}", display, why.description()),
+            Ok(file) => file,
+        };
 
-    match file.write_all(name.as_bytes()) {
-        Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
-        Ok(_) => println!("\n\n\t\"Ah, {:?}, what a wonderful name.\"\n", name),
-    }
+        match file.write_all(name.as_bytes()) {
+            Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
+            Ok(_) => println!("\n\n\t\"Ah, {:?}, what a wonderful name.\"\n", name),
+        }
 
-    let mut file = match OpenOptions::new().append(true).open(path) {
-        Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
-        Ok(_) => file,
-    };
-*/
+        let mut file = match OpenOptions::new().append(true).open(path) {
+            Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
+            Ok(_) => file,
+        };
+    */
     if &name == "Bart" {
         println!("\t\"Oh heavens, it's you! The creators of this fine establishment would like to give you a bri-, I mean, a gift\"\n");
-    //    write!(file, "\n{}", 10000);
+        //    write!(file, "\n{}", 10000);
         chips = 10000;
         println!("You have received 10,000 chips!\n");
     } else {
         println!("\t\"There was a {:?} here the other day. Lost his house. I'm sure you'll do better though, eh?\"\n", name);
-      //  write!(file, "\n{}", 100);
+        //  write!(file, "\n{}", 100);
         println!("\t\"Here's some chips to get you started tonight\"");
     }
     write_file(name, chips);

@@ -1,21 +1,19 @@
 //high-low module
 mod deck;
 mod player;
-use crate::high_low::player::*;
 use crate::high_low::deck::*;
-use text_io::read;
+use crate::high_low::player::*;
+use std::error::Error;
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
 use std::path::Path;
-use std::error::Error;
+use text_io::read;
 
-pub fn blackjack(){
-
+pub fn blackjack() {
     let mut choice = 0;
-    let mut game :char = 'y';
+    let mut game: char = 'y';
     let mut result = 0;
     println!("Blackjack game starting...\n");
-
 
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
@@ -47,15 +45,11 @@ pub fn blackjack(){
 
         if get_total(&player.0) == 21 && get_total(&dealer.0) != 21 {
             println!("Blackjack! Congrats, you win!")
-        }
-        else if get_total(&player.0) != 21 && get_total(&dealer.0) == 21 {
+        } else if get_total(&player.0) != 21 && get_total(&dealer.0) == 21 {
             println!("Dealer got blackjack! You lose!")
-        }
-
-        else {
+        } else {
             println!("Want another card? y/n");
             hit = read!();
-
 
             while (get_total(&player.0) <= 21) && (hit == 'y') {
                 player.add_to_hand(deck.draw());
@@ -94,8 +88,7 @@ pub fn blackjack(){
 }
 
 //test to ensure this module linking stuff is working correctly
-pub fn high_low(){
-
+pub fn high_low() {
     //create player
     let mut player: Player = Player::new_player();
     let path = Path::new("save.txt");
@@ -105,7 +98,7 @@ pub fn high_low(){
         Ok(file) => file,
     };
     let reader = BufReader::new(file);
-   /* let mut iter = reader.lines();
+    /* let mut iter = reader.lines();
     let mut name = match iter.next() {
         Some(T) => T.unwrap(),
         None => "Player".to_string(),
@@ -118,17 +111,16 @@ pub fn high_low(){
     for line in reader.lines() {
         vec_lines.push(line.unwrap());
     }
-    let name =  vec_lines[0].clone();
+    let name = vec_lines[0].clone();
 
     let chips = vec_lines[1].clone();
 
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
-    let mut game :char = 'y';
+    let mut game: char = 'y';
     let mut result = 0;
     println!("high-low game starting");
-
 
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
@@ -145,7 +137,9 @@ pub fn high_low(){
 
         //Player chooses if it's higher or lower
         while choice != 1 && choice != 2 {
-            println!("Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n");
+            println!(
+                "Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n"
+            );
             choice = read!();
         }
 
@@ -164,10 +158,13 @@ pub fn high_low(){
             result = 3; //Card was the same
         }
 
-
-        if choice == result {println!("You win!");}
-        else if result == 3 {println!("Card was same value, it's a draw!");}
-        else {println!("You lose :("); }
+        if choice == result {
+            println!("You win!");
+        } else if result == 3 {
+            println!("Card was same value, it's a draw!");
+        } else {
+            println!("You lose :(");
+        }
 
         //Reset choice
         choice = 0;
@@ -179,9 +176,8 @@ pub fn high_low(){
 }
 
 //war!
-pub fn war(){
-
-    let bet_amount:i32 = 5; 
+pub fn war() {
+    let bet_amount: i32 = 5;
     let mut game: char = 'y';
 
     println!("War game starting...\n");
@@ -196,55 +192,68 @@ pub fn war(){
     let mut dealer_deck: Deck = Deck::empty_deck();
 
     //deal cards to each person until 'deck' is empty
-    while !deck.is_empty(){
+    while !deck.is_empty() {
         player_deck.add_card(deck.draw());
         dealer_deck.add_card(deck.draw());
     }
 
     //TODO: Have Reginald tell player the game is gonna start, and how it works
-    
-        //after every 'round' the player can choose to either
-        //continue
-        //increase bet
-        //decrease bet
-        //but only in increments of 5 or 10 depending on how Reginald is feeling
+
+    //after every 'round' the player can choose to either
+    //continue
+    //increase bet
+    //decrease bet
+    //but only in increments of 5 or 10 depending on how Reginald is feeling
     println!("What would you like the starting bet be? Default is 5 chips");
 
     //1 = dealer, 2 = player, 3 = tie
     let mut winner = 3;
     let mut choice = 0;
-    
+
     //start game loop
-    while game == 'y'{
-    
+    while game == 'y' {
         //draw
         let mut d_card = dealer_deck.draw();
         let mut p_card = player_deck.draw();
 
         //determine winner
-        
-        while winner == 3{
-            //if tie keep looping, 
-            winner = War_Winner(bet_amount, d_card, p_card);
+        winner = war_winner(bet_amount, d_card, p_card);
+        while winner == 3 {
+            //if tie keep looping,
+            //burn three cards
+            dealer_deck.draw();
+            dealer_deck.draw();
+            dealer_deck.draw();
+            player_deck.draw();
+            player_deck.draw();
+            player_deck.draw();
+
+            d_card = dealer_deck.draw();
+            p_card = dealer_deck.draw();
+
+            winner = war_winner(bet_amount, d_card, p_card);
         }
+
+        println!("winner returned {}", winner);
 
         println!("Would you like to go another round? y/n");
         game = read!();
+        winner = 3;
     }
 }
 
 ///Used to handle displaying the winner - returns a number representing who won / tie
-pub fn War_Winner(bet:i32, d_card:i32, p_card:i32)-> i32{
-//0 means forfeit tie
-//1 means dealer wins
-//2 means player wins
-//3 means its war time
+pub fn war_winner(bet: i32, d_card: i32, p_card: i32) -> i32 {
+    //0 means forfeit tie
+    //1 means dealer wins
+    //2 means player wins
+    //3 means its war time
     let mut winner = 0;
     let mut choice = 1;
     println!("   Reginald's Card");
     display_single(d_card);
 
-    if get_value(d_card) == get_value(p_card){
+    if get_value(d_card) == get_value(p_card) {
         //its a tie!
         println!(" .. Oh?");
         println!("   Your Card");
@@ -258,54 +267,48 @@ pub fn War_Winner(bet:i32, d_card:i32, p_card:i32)-> i32{
             println!("\n Ah.. That's too bad.");
             println!("\nThat means I get half");
             0
-        }
-        else{
+        } else {
             //war!
             println!("War! Now we burn three cards");
             3
         }
-    }
-
-    else if get_value(d_card) > get_value(p_card){
+    } else if get_value(d_card) > get_value(p_card) {
         //dealer wins
         println!(" Dealer Wins!");
         println!("   Your Card");
         display_single(p_card);
         1
-    }
-    else{
+    } else {
         //player wins
         println!(" You Win!");
         println!("   Your Card");
         display_single(p_card);
         2
     }
-
 }
 
-
 ///Red Dog Poker
-pub fn red_dog_poker(){
-
-
+pub fn red_dog_poker() {
     println!("Red Dog Poker Starting..");
-    let deck:Deck = Deck::new_deck();
+    let mut deck: Deck = Deck::new_deck();
 
     let mut game: char = 'y';
-    let mut bet_amount:i32 = 10;
-    let mut button: char = '\0';
+    let mut bet_amount: i32 = 10;
+    let mut button = 0;
 
     println!("Would you like to hear the rules? y/n?");
     game = read!();
 
-    if game == 'y'{
+    if game == 'y' {
         println!("You're allowed to bet 2 times per round.\nThe first time is when you're dealt 2 cards.");
         println!("Then depending on those two, you either double down or call.");
         println!("if you call, you get whatever payout for the first two cards.\nif you double down, you get dealt a 3rd card.");
 
         println!("Heres how the cards work");
 
-        println!("\n\t [ a ] [ b ] [ c ] say a, b, and c represent the first, second and third cards.");
+        println!(
+            "\n\t [ a ] [ b ] [ c ] say a, b, and c represent the first, second and third cards."
+        );
         println!("\n\t You lose when a and b are not the same, and aren't consecutive, and when c is either higher or lower than either a or b");
         println!("Otherwise you want to look if the cards are\n1: The Same\n2: Consecutive\n3: Or if c is in between a and b");
         println!("If all three are the same, payout is 1:11\nIf a and b are the same, but c is different, it's a push
@@ -316,40 +319,40 @@ pub fn red_dog_poker(){
         button = read!();
     }
 
-
+    game = 'y';
     print!("\n------ Let's Play Red Dog Poker! ------\n");
-
 
     deck.shuffle_deck();
 
+    let mut player: Player = Player::new_player();
 
-    println!("\nWhat would you like to bet? (Default 10)");
-    
-    //deal player two cards
-    //display hand
-    //
-    //ask if they'd like to double down, or call
-    //
-    //if call{
-    //  process payout
-    //  discard cards
-    //}else if double down{
-    //
-    //  deal third card to player
-    //  display hand
-    //  process payout
-    //  discard cards
-    //}
-    //
-    //^put in game loop
-    //
-    //process payout could be like a function that handles the cases
-    
+    while game == 'y' {
+        println!("\nWhat would you like to bet? (Default 10)");
 
+        //deal player two cards
+        player.add_to_hand(deck.draw());
+        player.add_to_hand(deck.draw());
+        //display hand
+        println!("\n\tYour Hand:");
+        display_cards(&player.0);
+
+        //ask if they'd like to double down, or call
+        println!("Would you like to: \n1: double down\n2: call");
+        button = read!();
+
+        if button == 1 {
+            player.add_to_hand(deck.draw());
+            println!("\n\tYour Hand:");
+            display_cards(&player.0);
+        }
+        //process payout
+        //discard cards
+        player.discard_hand();
+
+        //^put in game loop
+        println!("\nContinue? y/n");
+        game = read!();
+    }
 }
-
-
-
-
 
 

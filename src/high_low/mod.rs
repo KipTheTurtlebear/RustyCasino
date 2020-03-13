@@ -280,20 +280,9 @@ pub fn war() {
         dealer_deck.add_card(deck.draw());
     }
 
-    //TODO: Have Reginald tell player the game is gonna start, and how it works
-
-    //after every 'round' the player can choose to either
-    //continue
-    //increase bet
-    //decrease bet
-    //but only in increments of 5 or 10 depending on how Reginald is feeling
-    //1 = dealer, 2 = player, 3 = tie
-
-    //start game loop
+    println!("You have: {} chips\n", player.1);
     while game == 'y' {
         let mut exceed = true;
-        println!("You have: {} chips\n", player.1);
-
         while exceed {
             println!("\nWhat would you like to bet? (Default 5)");
             let input: String = read!();
@@ -306,7 +295,7 @@ pub fn war() {
             }
         }
 
-        println!("betting {} chips", bet_amount);
+        println!("\tbetting {} chips", bet_amount);
         player.lose_chips(bet_amount);
         //draw
         let mut d_card = dealer_deck.draw();
@@ -325,7 +314,7 @@ pub fn war() {
             player_deck.draw();
             player_deck.draw();
             player_deck.draw();
-            println!("betting {} chips", bet_amount);
+            println!("\tbetting {} chips", bet_amount);
 
             d_card = dealer_deck.draw();
             p_card = dealer_deck.draw();

@@ -411,7 +411,21 @@ pub fn red_dog_poker() {
     deck.shuffle_deck();
 
     while game == 'y' {
-        println!("\nWhat would you like to bet? (Default 10)");
+        let mut exceed = true;
+        println!("You have: {} chips\n", player.1);
+        
+        while exceed{
+            println!("\nWhat would you like to bet? (Default 10)");
+            let input: String = read!();
+            let g = match input.parse::<i32>(){
+                Err(e) => exceed = true,
+                Ok(f) => bet_amount = f,
+            };
+            if player.check_chips(bet_amount){
+                exceed = false;
+            }   
+
+        }
 
         player.lose_chips(bet_amount);
 
@@ -458,10 +472,11 @@ pub fn red_dog_poker() {
         }
 
         player.discard_hand();
-        //^put in game loop
         println!("\nContinue? y/n");
         game = read!();
     }
+    //game == 'n' so end game
+    write_file(player.2, player.1);
 }
 
 ///takes the player object and checks its hand to determine what the payout is

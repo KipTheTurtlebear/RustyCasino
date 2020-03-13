@@ -110,11 +110,8 @@ pub fn write_file(name:String, chips:i32) {
         Ok(_) => file,
     };
 
-    if &name == "Bart" {
-        write!(file, "\n{}", 10000);
-    } else {
-        write!(file, "\n{}", 100);
-    }
+    write!(file, "\n{}", chips);
+
 }
 
 

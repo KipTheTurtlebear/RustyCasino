@@ -239,7 +239,30 @@ pub fn high_low() {
 }
 //war!
 pub fn war() {
-    let bet_amount: i32 = 5;
+    //create player
+    let mut player: Player = Player::new_player();
+    let path = Path::new("save.txt");
+    let display = path.display();
+
+    let file = match File::open(path) {
+        Err(why) => panic!("Couldn't open {}: {}", display, why.description()),
+        Ok(file) => file,
+    };
+    let reader = BufReader::new(file);
+    let mut iter = reader.lines();
+    let mut name = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "Player".to_string(),
+    };
+    let chips = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "100".to_string(),
+    };
+
+    player.set_name(name);
+    player.add_chips(chips.parse::<i32>().unwrap());
+
+    let mut bet_amount: i32 = 5;
     let mut game: char = 'y';
 
     println!("War game starting...\n");
@@ -266,14 +289,29 @@ pub fn war() {
     //increase bet
     //decrease bet
     //but only in increments of 5 or 10 depending on how Reginald is feeling
-    println!("What would you like the starting bet be? Default is 5 chips");
-
     //1 = dealer, 2 = player, 3 = tie
     let mut winner = 3;
     let mut choice = 0;
 
     //start game loop
     while game == 'y' {
+        let mut exceed = true;
+        println!("You have: {} chips\n", player.1);
+
+        while exceed {
+            println!("\nWhat would you like to bet? (Default 5)");
+            let input: String = read!();
+            let g = match input.parse::<i32>() {
+                Err(e) => exceed = true,
+                Ok(f) => bet_amount = f,
+            };
+            if player.check_chips(bet_amount) {
+                exceed = false;
+            }
+        }
+
+        println!("betting {} chips", bet_amount);
+        player.lose_chips(bet_amount);
         //draw
         let mut d_card = dealer_deck.draw();
         let mut p_card = player_deck.draw();
@@ -282,6 +320,8 @@ pub fn war() {
         winner = war_winner(bet_amount, d_card, p_card);
         while winner == 3 {
             //if tie keep looping,
+            player.lose_chips(bet_amount);
+            bet_amount += bet_amount;
             //burn three cards
             dealer_deck.draw();
             dealer_deck.draw();
@@ -289,6 +329,7 @@ pub fn war() {
             player_deck.draw();
             player_deck.draw();
             player_deck.draw();
+            println!("betting {} chips", bet_amount);
 
             d_card = dealer_deck.draw();
             p_card = dealer_deck.draw();
@@ -296,12 +337,19 @@ pub fn war() {
             winner = war_winner(bet_amount, d_card, p_card);
         }
 
-        println!("winner returned {}", winner);
+        if winner == 1 {
+            println!("Too bad! You lose those chips");
+        } else if winner == 2 {
+            println!("Nice! Here's {} chips", bet_amount + bet_amount);
+            println!("\n\tYour Chips: {}", player.1);
+            player.add_chips(bet_amount + bet_amount);
+        }
 
         println!("Would you like to go another round? y/n");
         game = read!();
-        winner = 3;
     }
+    
+    write_file(player.2, player.1);
 }
 
 ///Used to handle displaying the winner - returns a number representing who won / tie
@@ -332,6 +380,7 @@ pub fn war_winner(bet: i32, d_card: i32, p_card: i32) -> i32 {
         } else {
             //war!
             println!("War! Now we burn three cards");
+
             3
         }
     } else if get_value(d_card) > get_value(p_card) {
@@ -413,18 +462,17 @@ pub fn red_dog_poker() {
     while game == 'y' {
         let mut exceed = true;
         println!("You have: {} chips\n", player.1);
-        
-        while exceed{
+
+        while exceed {
             println!("\nWhat would you like to bet? (Default 10)");
             let input: String = read!();
-            let g = match input.parse::<i32>(){
+            let g = match input.parse::<i32>() {
                 Err(e) => exceed = true,
                 Ok(f) => bet_amount = f,
             };
-            if player.check_chips(bet_amount){
+            if player.check_chips(bet_amount) {
                 exceed = false;
-            }   
-
+            }
         }
 
         player.lose_chips(bet_amount);

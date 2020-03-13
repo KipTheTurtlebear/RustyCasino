@@ -43,19 +43,16 @@ impl Deck {
 
     ///draw card - gets rid of the card 'at the top' from the deck and returns it
     pub fn draw(&mut self) -> i32 {
-
         let mut a = self.0.pop();
-        
-        if a == None{
+
+        if a == None {
             println!("\n Let me just shuffle these cards real quick");
             self.0 = (1..=52).collect();
             self.shuffle_deck();
             a = self.0.pop();
-
         }
-            let card: i32 = a.unwrap();
-            card
-        
+        let card: i32 = a.unwrap();
+        card
     }
 
     ///displays every card and their corresponding suite

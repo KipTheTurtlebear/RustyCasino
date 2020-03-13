@@ -11,6 +11,27 @@ use std::error::Error;
 
 pub fn blackjack(){
 
+    //create player
+    let mut player: Player = Player::new_player();
+    let path = Path::new("save.txt");
+    let display = path.display();
+    let file = match File::open(path) {
+        Err(why) => panic!("Couldn't open {}: {}", display, why.description()),
+        Ok(file) => file,
+    };
+    let reader = BufReader::new(file);
+    let mut iter = reader.lines();
+    let mut name = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "Player".to_string(),
+    };
+    let chips = match iter.next() {
+        Some(T) => T.unwrap(),
+        None => "100".to_string(),
+    };
+
+    player.set_name(name);
+    player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
     let mut game :char = 'y';
     let mut result = 0;
@@ -114,15 +135,8 @@ pub fn high_low(){
     let chips = match iter.next() {
         Some(T) => T.unwrap(),
         None => "100".to_string(),
-    };/*
-    let mut vec_lines = vec![];
-    for line in reader.lines() {
-        vec_lines.push(line.unwrap());
-    }
-    let name =  vec_lines[0].clone();
+    };
 
-    let chips = vec_lines[1].clone();
-*/
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
@@ -229,4 +243,5 @@ pub fn high_low(){
 
         game = read!();
     }
+    write_file(player.2, player.1);
 }

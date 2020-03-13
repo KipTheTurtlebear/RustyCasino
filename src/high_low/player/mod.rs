@@ -27,6 +27,7 @@ impl Player {
     }
 
     /*
+     //unused functions
     pub fn show_hand(&self) {
         let hand = &self.0;
 

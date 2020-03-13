@@ -31,13 +31,14 @@ impl Deck {
         self.0.shuffle(&mut rng);
         self
     }
+
     /*
+     //unused function
     /// Count the number of cards in the deck
     pub fn len(&self) -> usize {
         self.0.len()
     }
     */
-
     /// Is this deck empty?
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()

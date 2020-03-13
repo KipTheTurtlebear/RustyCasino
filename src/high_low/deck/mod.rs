@@ -73,20 +73,20 @@ impl Deck {
 //a 'self' so it doesn't count as a part of the deck struct implementation.
 //still usable as long as the deck crate is imported.
 
-pub fn get_total(deck: &Vec<i32>) -> i32 {
+pub fn get_total(deck: &[i32]) -> i32 {
     //let mut value = 0;
     let mut aces = 0;
     let mut total = 0;
     for card in deck {
         let value = get_bj_value(*card);
         if value == 11 {
-            aces +=1;
+            aces += 1;
         }
         total += value;
     }
     while total > 21 && aces > 0 {
-        total = total - 10;
-        aces = aces - 1;
+        total -= 10;
+        aces -= 1;
     }
     total
 }
@@ -97,8 +97,7 @@ pub fn get_bj_value(card: i32) -> i32 {
     if card == 1 || card == 14 || card == 27 || card == 40 {
         //value = 11;
         11
-    }
-    else if card >= 2 && card <= 10 {
+    } else if card >= 2 && card <= 10 {
         //value = card;
         card
     } else if card >= 11 && card <= 13 {
@@ -106,7 +105,7 @@ pub fn get_bj_value(card: i32) -> i32 {
         10
     } else if card >= 15 && card <= 23 {
         //value = card - 13;
-        card-13
+        card - 13
     } else if card >= 24 && card <= 26 {
         //value = 10;
         10
@@ -125,7 +124,7 @@ pub fn get_bj_value(card: i32) -> i32 {
         10
     }
     */
-    }else{
+    } else {
         10
     }
     //value
@@ -266,7 +265,7 @@ pub fn display_single(card: i32) {
 }
 
 ///displays the cards in the users hand with a 'picture'
-pub fn display_cards(cards: &Vec<i32>) {
+pub fn display_cards(cards: &[i32]) {
     //display top layer
     for card in cards {
         print!("|");

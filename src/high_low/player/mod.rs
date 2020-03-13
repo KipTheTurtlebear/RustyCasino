@@ -86,7 +86,7 @@ impl Player {
 
         //if this returns false, user does not have enough chips to bet
         //so they need to change bet amount
-        
+
         /*
         if to_bet > self.1 {
             false
@@ -94,7 +94,7 @@ impl Player {
             true
         }
         */
-        !(to_bet>self.1)
+        to_bet <= self.1
     }
 }
 

@@ -4,6 +4,7 @@ pub(crate) mod player;
 use crate::high_low::deck::*;
 use crate::high_low::player::*;
 use std::cmp;
+use std::cmp::Ordering;
 use std::error::Error;
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
@@ -132,8 +133,8 @@ pub fn high_low() {
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
+    let mut result: i32;
     let mut game: char = 'y';
-    let mut result = 0;
     let mut bet: i32 = 0;
     let mut double = true;
     println!("high-low game starting");
@@ -145,7 +146,7 @@ pub fn high_low() {
         while exceed {
             println!("How much would you like to bet?\n");
             let input: String = read!();
-            let _g = match input.parse::<i32>() {
+            match input.parse::<i32>() {
                 Err(_e) => exceed = true,
                 Ok(f) => bet = f,
             };
@@ -198,6 +199,7 @@ pub fn high_low() {
             print_card(temp_card2);
             display_single(temp_card2);
 
+            /*
             //Compare 1st and 2nd card
             if get_value(temp_card2) > get_value(temp_card1) {
                 result = 1; //Card was higher
@@ -205,6 +207,13 @@ pub fn high_low() {
                 result = 2; //Card was lower
             } else if get_value(temp_card2) == get_value(temp_card1) {
                 result = 3; //Card was the same
+            }
+            */
+
+            match get_value(temp_card2).cmp(&(get_value(temp_card1))) {
+                Ordering::Greater => result = 1,
+                Ordering::Less => result = 2,
+                Ordering::Equal => result = 3,
             }
 
             if choice == result {
@@ -286,7 +295,7 @@ pub fn war() {
         while exceed {
             println!("\nWhat would you like to bet? (Default 5)");
             let input: String = read!();
-            let _g = match input.parse::<i32>() {
+            match input.parse::<i32>() {
                 Err(_e) => exceed = true,
                 Ok(f) => bet_amount = f,
             };
@@ -444,7 +453,7 @@ pub fn red_dog_poker() {
         while exceed {
             println!("\nWhat would you like to bet? (Default 10)");
             let input: String = read!();
-            let _g = match input.parse::<i32>() {
+            match input.parse::<i32>() {
                 Err(_e) => exceed = true,
                 Ok(f) => bet_amount = f,
             };

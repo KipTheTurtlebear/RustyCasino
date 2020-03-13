@@ -1,4 +1,5 @@
 mod high_low;
+use crate::high_low::player::*;
 use text_io::read;
 use std::fs::File;
 use std::io::prelude::*;
@@ -21,10 +22,11 @@ pub fn Rusty_Casino(){
     println!("\t\"What may I call you?\"\n");
     println!("\nPlease enter your name below:\n");
     let mut name: String = read!();
-    /*
+    let mut chips = 100;
+/*
     let mut textfile: String = name.clone();
     textfile.push_str(".txt");
-    */
+
     // Create file and save path
     let path = Path::new("save.txt");
     let display = path.display();
@@ -44,17 +46,18 @@ pub fn Rusty_Casino(){
         Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
         Ok(_) => file,
     };
-
+*/
     if &name == "Bart" {
         println!("\t\"Oh heavens, it's you! The creators of this fine establishment would like to give you a bri-, I mean, a gift\"\n");
-        write!(file, "\n{}", 10000);
+    //    write!(file, "\n{}", 10000);
+        chips = 10000;
         println!("You have received 10,000 chips!\n");
     } else {
         println!("\t\"There was a {:?} here the other day. Lost his house. I'm sure you'll do better though, eh?\"\n", name);
-        write!(file, "\n{}", 100);
+      //  write!(file, "\n{}", 100);
         println!("\t\"Here's some chips to get you started tonight\"");
     }
-
+    write_file(name, chips);
     while choice != 9 {
 
         println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n2: Blackjack\n9: Leave Casino\n");

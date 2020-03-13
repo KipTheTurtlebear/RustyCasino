@@ -212,12 +212,22 @@ impl Deck {
     ///displays a single card
     pub fn display_single(card: i32){
         print!("|");
-        print_value(card);
-        println!("  |");
-        
-        println!("| {} |", card_info(card).2);
+        if card == 10 || card == 23 || card == 36 || card == 49 {
+            print_value(card);
+            println!("  |");
 
-        print!("|  ");
+            println!("|  {} |", card_info(card).2);
+
+            print!("|  ");
+        }
+        else {
+            print_value(card);
+            println!("  |");
+
+            println!("| {} |", card_info(card).2);
+
+            print!("|  ");
+        }
         print_value(card);
         println!("|");
     }
@@ -236,9 +246,13 @@ impl Deck {
 
         //display middle layer
         for card in cards{
-            print!("| {} |  ", card_info(*card).2);
+            if *card == 10 || *card == 23 || *card == 36 || *card == 49 {
+                print!("|  {} |  ", card_info(*card).2);
+            }
+            else {
+                print!("| {} |  ", card_info(*card).2);
+            }
         }
-
         println!("");
 
         //display bottom layer

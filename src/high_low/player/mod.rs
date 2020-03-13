@@ -1,5 +1,5 @@
 //player module
-use crate::high_low::deck;
+//use crate::high_low::deck;
 use std::error::Error;
 use std::fs::{File, OpenOptions};
 use std::io::Write;
@@ -26,6 +26,7 @@ impl Player {
         self.0.push(card);
     }
 
+    /*
     pub fn show_hand(&self) {
         let hand = &self.0;
 
@@ -33,7 +34,9 @@ impl Player {
             deck::print_card(*card);
         }
     }
+    */
 
+    /*
     ///Remove card from player's hand
     pub fn remove_card(&mut self, to_remove: i32) {
         let mut count = 0;
@@ -49,6 +52,7 @@ impl Player {
             count += 1;
         }
     }
+    */
 
     ///Discard hand
     pub fn discard_hand(&mut self) {
@@ -113,5 +117,5 @@ pub fn write_file(name: String, chips: i32) {
         Ok(_) => file,
     };
 
-    write!(file, "\n{}", chips);
+    write!(file, "\n{}", chips).expect("Couldn't write to file");
 }

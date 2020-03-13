@@ -31,10 +31,12 @@ impl Deck {
         self.0.shuffle(&mut rng);
         self
     }
+    /*
     /// Count the number of cards in the deck
     pub fn len(&self) -> usize {
         self.0.len()
     }
+    */
 
     /// Is this deck empty?
     pub fn is_empty(&self) -> bool {
@@ -55,6 +57,7 @@ impl Deck {
         card
     }
 
+    /*
     ///displays every card and their corresponding suite
     pub fn show_deck(&self) {
         let deck = &self.0;
@@ -63,6 +66,7 @@ impl Deck {
             print_card(*card);
         }
     }
+    */
 }
 
 //had to move these functions out of the deck impl because they dont contain
@@ -70,11 +74,11 @@ impl Deck {
 //still usable as long as the deck crate is imported.
 
 pub fn get_total(deck: &Vec<i32>) -> i32 {
-    let mut value = 0;
+    //let mut value = 0;
     let mut aces = 0;
     let mut total = 0;
     for card in deck {
-        value = get_bj_value(*card);
+        let value = get_bj_value(*card);
         if value == 11 {
             aces = aces + 1;
         }

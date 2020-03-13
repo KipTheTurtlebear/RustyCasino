@@ -1,12 +1,12 @@
 mod high_low;
 use crate::high_low::player::*;
-use std::fs::File;
-use std::fs::OpenOptions;
-use std::io::prelude::*;
-use std::path::Path;
+//use std::fs::File;
+//use std::fs::OpenOptions;
+//use std::io::prelude::*;
+//use std::path::Path;
 use text_io::read;
 
-pub fn Rusty_Casino() {
+pub fn rusty_casino() {
     let mut choice = 0;
     println!("\n\n\n\n");
     println!("████████╗██╗  ██╗███████╗    ██████╗ ██╗   ██╗███████╗████████╗██╗   ██╗     ██████╗ █████╗ ███████╗██╗███╗   ██╗ ██████╗ ");
@@ -20,7 +20,7 @@ pub fn Rusty_Casino() {
     println!("\t\"Hello, my name is Reginald. It will be my pleasure to be your aide today\"");
     println!("\t\"What may I call you?\"\n");
     println!("\nPlease enter your name below:\n");
-    let mut name: String = read!();
+    let name: String = read!();
     let mut chips = 100;
     /*
         let mut textfile: String = name.clone();

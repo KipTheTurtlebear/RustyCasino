@@ -1,4 +1,4 @@
-use rusty_casino::*;
+//use rusty_casino::*;
 
 fn main() {
     /*
@@ -16,5 +16,5 @@ fn main() {
     deck.show_deck();
     */
 
-    rusty_casino::Rusty_Casino();
+    rusty_casino::rusty_casino();
 }

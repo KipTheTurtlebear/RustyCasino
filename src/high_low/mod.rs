@@ -7,6 +7,7 @@ use std::error::Error;
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
 use std::path::Path;
+use std::cmp;
 use text_io::read;
 
 
@@ -354,6 +355,9 @@ pub fn war_winner(bet: i32, d_card: i32, p_card: i32) -> i32 {
 ///Red Dog Poker
 pub fn red_dog_poker() {
     println!("Red Dog Poker Starting..");
+    
+    //grab player's chips
+
     let mut deck: Deck = Deck::new_deck();
 
     let mut game: char = 'y';
@@ -400,23 +404,69 @@ pub fn red_dog_poker() {
         println!("\n\tYour Hand:");
         display_cards(&player.0);
 
-        //ask if they'd like to double down, or call
-        println!("Would you like to: \n1: double down\n2: call");
-        button = read!();
-
-        if button == 1 {
-            player.add_to_hand(deck.draw());
-            println!("\n\tYour Hand:");
-            display_cards(&player.0);
+        //if first two cards are consecutive, push
+        
+        if player.0[0] +1 == player.0[1] || player.0[0] - 1 == player.0[1]{
+            println!("It's a push, so nothing happens");     
         }
-        //process payout
-        //discard cards
-        player.discard_hand();
+        else{
+            //ask if they'd like to double down, or call
+            println!("Would you like to: \n1: double down\n2: call");
+            button = read!();
 
+            if button == 1 {
+                player.add_to_hand(deck.draw());
+                println!("\n\tYour Hand:");
+                display_cards(&player.0);
+            }
+            //process payout
+            //discard cards
+        }
+
+        player.discard_hand();
         //^put in game loop
         println!("\nContinue? y/n");
         game = read!();
     }
 }
+
+///takes the player object and checks its hand to determine what the payout is
+pub fn rdp_payout(player:Player, bet_amount:i32) -> i32{
+    //should only be called when player has 3 cards
+    let a = &player.0[0];
+    let b = &player.0[1];
+    let c = &player.0[2];
+
+    //not same, not in spread
+    if a != b && c > cmp::max(a, b) && c < cmp::min(a, b){
+        -bet_amount
+    }
+        
+    //all 3 same
+    else if a == b && c == b{
+        bet_amount + 11
+    }
+
+    //spread
+    else{
+        let spread = cmp::max(a,b) - cmp::min(a,b);
+
+        //only one possible card ex: if a = 11 and b = 9, c has to be 10 to win
+        if spread == 2{
+            bet_amount + 5
+        }
+        else if spread == 3{
+            bet_amount + 4
+        }
+        else if spread == 4{
+            bet_amount + 2
+        }
+        else{
+            bet_amount + 1
+        }
+    }
+}
+
+
 
 

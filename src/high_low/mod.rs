@@ -355,38 +355,42 @@ pub fn war_winner(d_card: i32, p_card: i32) -> i32 {
     println!("   Reginald's Card");
     display_single(d_card);
 
-    if get_value(d_card) == get_value(p_card) {
-        //its a tie!
-        println!(" .. Oh?");
-        println!("   Your Card");
-        display_single(p_card);
+    match get_value(d_card).cmp(&(get_value(p_card))) {
+        Ordering::Equal => {
+            //its a tie!
+            println!(" .. Oh?");
+            println!("   Your Card");
+            display_single(p_card);
 
-        println!("\n\n\tIt's a tie! Well.. would you like to forfeit or start a war?\n1: War\n2: Forfeit");
-        let choice: char = read!();
+            println!("\n\n\tIt's a tie! Well.. would you like to forfeit or start a war?\n1: War\n2: Forfeit");
+            let choice: char = read!();
 
-        if choice == '2' {
-            //forfeit tie - lose half
-            println!("\n Ah.. That's too bad.");
-            println!("\nThat means I get half");
-            0
-        } else {
-            //war!
-            println!("War! Now we burn three cards");
+            if choice == '2' {
+                //forfeit tie - lose half
+                println!("\n Ah.. That's too bad.");
+                println!("\nThat means I get half");
+                0
+            } else {
+                //war!
+                println!("War! Now we burn three cards");
 
-            3
+                3
+            }
         }
-    } else if get_value(d_card) > get_value(p_card) {
-        //dealer wins
-        println!(" Dealer Wins!");
-        println!("   Your Card");
-        display_single(p_card);
-        1
-    } else {
-        //player wins
-        println!(" You Win!");
-        println!("   Your Card");
-        display_single(p_card);
-        2
+        Ordering::Greater => {
+            //dealer wins
+            println!(" Dealer Wins!");
+            println!("   Your Card");
+            display_single(p_card);
+            1
+        }
+        Ordering::Less => {
+            //player wins
+            println!(" You Win!");
+            println!("   Your Card");
+            display_single(p_card);
+            2
+        }
     }
 }
 

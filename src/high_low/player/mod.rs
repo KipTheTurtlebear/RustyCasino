@@ -9,7 +9,6 @@ use std::error::Error;
 pub struct Player(pub Vec<i32>, pub i32, pub String); //Hand of cards, chips, name
 
 
-
 impl Player {
     ///Create the player
     pub fn new_player() -> Self {
@@ -24,6 +23,9 @@ impl Player {
 
     ///Add card to player's hand
     pub fn add_to_hand(&mut self, card: i32) {
+
+
+
 
         //push to hand
         self.0.push(card);
@@ -48,11 +50,17 @@ impl Player {
                 break;
             }
 
-            //haven't found, so up the counter 
+            //haven't found, so up the counter
             count += 1;
         }
     }
 
+    ///Discard hand
+    pub fn discard_hand(&mut self) {
+        while !self.0.is_empty() {
+            self.0.pop();
+        }
+    }
 
     pub fn add_chips(&mut self, chips: i32) {
         match self.1.checked_add(chips) {
@@ -67,16 +75,18 @@ impl Player {
 
     ///removes chips upon loss
     pub fn lose_chips(&mut self, lose_amount: i32) {
+
         //do we want negative chips? let player buy in ?
 
         self.1 = self.1 - lose_amount;
     }
 
-
     ///Checks if player has enough chips to bet
+
     pub fn check_chips(&self, to_bet: i32) -> bool {
 
         //use this function where betting is handled. 
+
         //if this returns false, user does not have enough chips to bet
         //so they need to change bet amount
         if to_bet > self.1 {
@@ -86,6 +96,7 @@ impl Player {
         }
     }
 }
+
 
 pub fn write_file(name:String, chips:i32) {
     let mut textfile: String = name.clone();
@@ -113,6 +124,7 @@ pub fn write_file(name:String, chips:i32) {
     write!(file, "\n{}", chips);
 
 }
+
 
 
 

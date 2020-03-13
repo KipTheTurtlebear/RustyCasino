@@ -1,13 +1,14 @@
 mod high_low;
 use crate::high_low::player::*;
 use text_io::read;
+
 use std::fs::File;
+use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::path::Path;
-use std::error::Error;
-use std::fs::OpenOptions;
+use text_io::read;
 
-pub fn Rusty_Casino(){
+pub fn Rusty_Casino() {
     let mut choice = 0;
     println!("\n\n\n\n");
     println!("████████╗██╗  ██╗███████╗    ██████╗ ██╗   ██╗███████╗████████╗██╗   ██╗     ██████╗ █████╗ ███████╗██╗███╗   ██╗ ██████╗ ");
@@ -59,15 +60,16 @@ pub fn Rusty_Casino(){
     }
     write_file(name, chips);
     while choice != 9 {
-
-        println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n2: Blackjack\n9: Leave Casino\n");
+        println!("Before you are several numbered doors. Which would you like to explore?:\n1: High Low\n2: Blackjack\n3: War\n4: Red Dog Poker\n9: Leave Casino\n");
         choice = read!();
         if choice == 1 {
             high_low::high_low();
-        }
-        else if choice == 2 {
+        } else if choice == 2 {
             high_low::blackjack();
+        } else if choice == 3 {
+            high_low::war();
+        } else if choice == 4 {
+            high_low::red_dog_poker();
         }
     }
-
 }

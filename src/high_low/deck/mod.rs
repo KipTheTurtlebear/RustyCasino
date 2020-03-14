@@ -88,6 +88,7 @@ pub fn get_total(deck: &[i32]) -> i32 {
     total
 }
 
+
 ///Returns the card's number value - Faces = 10
 pub fn get_bj_value(card: i32) -> i32 {
     //let value = card;
@@ -225,7 +226,6 @@ pub fn print_card(card: i32) {
 
 pub fn print_value(card: i32) {
     let num = get_value(card);
-
     if num >= 2 && num <= 10 {
         print!("{}", num);
     } else if num == 1 {
@@ -238,6 +238,7 @@ pub fn print_value(card: i32) {
         print!("K");
     }
 }
+
 
 ///displays a single card
 pub fn display_single(card: i32) {
@@ -257,6 +258,7 @@ pub fn display_single(card: i32) {
 
         print!("|  ");
     }
+
     print_value(card);
     println!("|");
 }

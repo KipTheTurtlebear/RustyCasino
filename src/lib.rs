@@ -1,5 +1,6 @@
 mod high_low;
 use crate::high_low::player::*;
+
 //use std::fs::File;
 //use std::fs::OpenOptions;
 //use std::io::prelude::*;
@@ -7,6 +8,7 @@ use crate::high_low::player::*;
 use text_io::read;
 
 pub fn rusty_casino() {
+
     let mut choice = 0;
     println!("\n\n\n\n");
     println!("████████╗██╗  ██╗███████╗    ██████╗ ██╗   ██╗███████╗████████╗██╗   ██╗     ██████╗ █████╗ ███████╗██╗███╗   ██╗ ██████╗ ");

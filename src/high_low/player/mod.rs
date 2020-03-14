@@ -55,6 +55,12 @@ impl Player {
     }
     */
 
+    pub fn draw(&mut self) -> i32 {
+        let a = self.0.pop();
+        let card: i32 = a.unwrap();
+        card
+    }
+
     ///Discard hand
     pub fn discard_hand(&mut self) {
         while !self.0.is_empty() {

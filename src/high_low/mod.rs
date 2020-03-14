@@ -5,11 +5,15 @@ use std::cmp;
 use std::cmp::Ordering;
 use crate::high_low::deck::*;
 use crate::high_low::player::*;
+use std::cmp;
+use std::cmp::Ordering;
 use std::error::Error;
 use std::fs::File;
-use std::io::{self, prelude::*, BufReader};
+use std::io::{prelude::*, BufReader};
+//use std::io::{self, prelude::*, BufReader};
 use std::path::Path;
 use text_io::read;
+
 
 pub fn get_bet() -> i32{
 
@@ -35,15 +39,13 @@ pub fn high_low() {
         Ok(file) => file,
     };
     let reader = BufReader::new(file);
-
     let mut iter = reader.lines();
-
-    let mut name = match iter.next() {
-        Some(T) => T.unwrap(),
+    let name = match iter.next() {
+        Some(t) => t.unwrap(),
         None => "Player".to_string(),
     };
     let chips = match iter.next() {
-        Some(T) => T.unwrap(),
+        Some(t) => t.unwrap(),
         None => "100".to_string(),
 
     };
@@ -51,19 +53,22 @@ pub fn high_low() {
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
     let mut choice = 0;
+    let mut result: i32;
     let mut game: char = 'y';
-    let mut result = 0;
-    let mut bet:i32 = 0;
+    let mut bet: i32 = 0;
     let mut double = true;
     println!("high-low game starting");
 
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
 
+
+
         //Deck of 52 cards created
         //Shuffle new deck every new game
         let mut deck: Deck = Deck::new_deck();
         deck.shuffle_deck();
+
 
         let mut exceed = true;
         if player.1 == 0 {
@@ -73,9 +78,11 @@ pub fn high_low() {
         }
         println!("You have: {} chips\n", player.1);
         while exceed {
+
             bet = get_bet();
             if player.check_chips(bet) && bet != 0 {exceed = false;}
         }
+
 
         //subtract bet
         player.lose_chips(bet);
@@ -93,7 +100,9 @@ pub fn high_low() {
 
             //Player chooses if it's higher or lower
             while choice != 1 && choice != 2 {
-                println!("Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n");
+                println!(
+                    "Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n"
+                );
                 choice = read!();
             }
 
@@ -103,6 +112,7 @@ pub fn high_low() {
             print_card(temp_card2);
             display_single(temp_card2);
 
+            /*
             //Compare 1st and 2nd card
             if get_value(temp_card2) > get_value(temp_card1) {
                 result = 1; //Card was higher
@@ -111,24 +121,30 @@ pub fn high_low() {
             } else if get_value(temp_card2) == get_value(temp_card1) {
                 result = 3; //Card was the same
             }
+            */
+
+            match get_value(temp_card2).cmp(&(get_value(temp_card1))) {
+                Ordering::Greater => result = 1,
+                Ordering::Less => result = 2,
+                Ordering::Equal => result = 3,
+            }
+
 
             if choice == result {
                 println!("You win!");
-                bet = bet * 2;
+                bet *= 2;
                 println!("Double or nothing? y/n\n");
                 game = read!();
                 if game == 'y' {
-                    double = true;
-                }
-                else {
-                    double = false;
+                    //double = true;
+                } else {
+                    //double = false;
                     println!("You've won {} chips!", bet);
                     player.add_chips(bet)
                 }
             } else if result == 3 {
                 println!("Card was same value, it's a draw!");
-            }
-            else {
+            } else {
                 println!("You lose :(");
             }
         }
@@ -142,6 +158,7 @@ pub fn high_low() {
     }
     write_file(player.2, player.1);
 }
+
 
 pub fn blackjack() {
 
@@ -266,6 +283,7 @@ pub fn blackjack() {
 //war!
 pub fn war() {
     let mut bet: i32 = 0;
+
     let mut game: char = 'y';
 
     println!("War game starting...\n");
@@ -306,6 +324,7 @@ pub fn war() {
         dealer.add_to_hand(deck.draw());
     }
 
+
     //TODO: Have Reginald tell player the game is gonna start, and how it works
 
 
@@ -331,15 +350,21 @@ pub fn war() {
         //subtract bet
         player.lose_chips(bet);
 
+
         //draw
         let mut d_card = dealer.draw();
         let mut p_card = player.draw();
 
         //determine winner
+
         winner = war_winner(bet, d_card, p_card);
+
         while winner == 3 {
             //if tie keep looping,
+            player.lose_chips(bet_amount);
+            bet_amount += bet_amount;
             //burn three cards
+
             dealer.draw();
             dealer.draw();
             dealer.draw();
@@ -347,8 +372,10 @@ pub fn war() {
             player.draw();
             player.draw();
 
+
             d_card = dealer.draw();
             p_card = dealer.draw();
+
 
             winner = war_winner(bet, d_card, p_card);
         }
@@ -361,56 +388,62 @@ pub fn war() {
         } else {
             println!("It's a tie!");
             player.add_chips(bet);
+
         }
 
+        println!("\n\tYour Chips: {}", player.1);
         println!("Would you like to go another round? y/n");
         game = read!();
-        winner = 3;
     }
+
+    write_file(player.2, player.1);
 }
 
 ///Used to handle displaying the winner - returns a number representing who won / tie
-pub fn war_winner(bet: i32, d_card: i32, p_card: i32) -> i32 {
+pub fn war_winner(d_card: i32, p_card: i32) -> i32 {
     //0 means forfeit tie
     //1 means dealer wins
     //2 means player wins
     //3 means its war time
-    let mut winner = 0;
-    let mut choice = 1;
     println!("   Reginald's Card");
     display_single(d_card);
 
-    if get_value(d_card) == get_value(p_card) {
-        //its a tie!
-        println!(" .. Oh?");
-        println!("   Your Card");
-        display_single(p_card);
+    match get_value(d_card).cmp(&(get_value(p_card))) {
+        Ordering::Equal => {
+            //its a tie!
+            println!(" .. Oh?");
+            println!("   Your Card");
+            display_single(p_card);
 
-        println!("\n\n\tIt's a tie! Well.. would you like to forfeit or start a war?\n1: War\n2: Forfeit");
-        choice = read!();
+            println!("\n\n\tIt's a tie! Well.. would you like to forfeit or start a war?\n1: War\n2: Forfeit");
+            let choice: char = read!();
 
-        if choice == 2 {
-            //forfeit tie - lose half
-            println!("\n Ah.. That's too bad.");
-            println!("\nThat means I get half");
-            0
-        } else {
-            //war!
-            println!("War! Now we burn three cards");
-            3
+            if choice == '2' {
+                //forfeit tie - lose half
+                println!("\n Ah.. That's too bad.");
+                println!("\nThat means I get half");
+                0
+            } else {
+                //war!
+                println!("War! Now we burn three cards");
+
+                3
+            }
         }
-    } else if get_value(d_card) > get_value(p_card) {
-        //dealer wins
-        println!(" Dealer Wins!");
-        println!("   Your Card");
-        display_single(p_card);
-        1
-    } else {
-        //player wins
-        println!(" You Win!");
-        println!("   Your Card");
-        display_single(p_card);
-        2
+        Ordering::Greater => {
+            //dealer wins
+            println!(" Dealer Wins!");
+            println!("   Your Card");
+            display_single(p_card);
+            1
+        }
+        Ordering::Less => {
+            //player wins
+            println!(" You Win!");
+            println!("   Your Card");
+            display_single(p_card);
+            2
+        }
     }
 }
 
@@ -472,12 +505,17 @@ pub fn red_dog_poker() {
 
     while game == 'y' {
         let mut exceed = true;
+
+        println!("You have: {} chips\n", player.1);
+
+
         if player.1 == 0 {
             println!("Oh wow, you're so poor, you have nothing. You poor, poor thing. Here's some pocket change.\n");
             println!("You've acquired 50 chips!");
             player.add_chips(50);
         }
         println!("You have: {} chips\n", player.1);
+
         while exceed {
             println!("\nWhat would you like to bet? (Default 10)");
             let input: String = read!();
@@ -512,7 +550,6 @@ pub fn red_dog_poker() {
             if button == '1' {
                 //double down
                 player.lose_chips(bet_amount);
-
                 player.add_to_hand(deck.draw());
                 print!("\n\tBetting: {} chips", bet_amount + bet_amount);
                 println!("\n\tYour Hand:");
@@ -521,7 +558,6 @@ pub fn red_dog_poker() {
 
                 //process payout
                 let mut payout = bet_amount + rdp_payout(hand, bet_amount);
-
                 if payout == 0 {
                     //this means you lost
                     println!("ooh, Bust. You lose those chips");
@@ -574,5 +610,53 @@ pub fn rdp_payout(hand: Vec<i32>, bet_amount: i32) -> i32 {
     }
 }
 
+
+
+///function to test all test-able functions of Rusty Casino
+pub fn test(){
+
+    let _result: bool;
+    println!("Testing started");
+
+    let mut deck:Deck = Deck::new_deck();
+    assert_eq!(52, deck.len(), "Checking if the newly created deck has 52 cards");
+
+    println!("\n\tShowing unshuffled deck:");
+    deck.show_deck();
+    println!("\n\tShowing shuffled deck:");
+    deck.shuffle_deck();
+    deck.show_deck();
+
+    let mut empty_deck:Deck = Deck::empty_deck();
+    assert_eq!(empty_deck.is_empty(), true, "Checking if empty deck is empty");
+
+    let card = deck.draw();
+    //place card in empty deck
+    empty_deck.add_card(card);
+    assert_eq!(empty_deck.is_empty(), false, "make sure empty deck isnt empty anymore");
+
+
+    let mut player:Player = Player::new_player();
+    assert_eq!(true, player.0.is_empty(), "Check if new player is empty (it should be empty)");
+    println!("adding card to player's hand");
+    player.add_to_hand(deck.draw());
+    assert_eq!(false,  player.0.is_empty(), "Checking if player isn't empty (we added 1 card)");
+
+    player.set_name("Test".to_string());
+    assert_eq!("Test", player.2, "Testing set_name()");
+
+    player.add_chips(10);
+    assert_eq!(10, player.1, "testing add_chips()");
+
+    player.lose_chips(9);
+    assert_eq!(1, player.1, "testing lose_chips()");
+
+    player.discard_hand();
+    println!("emptying hand");
+    assert_eq!(player.0.is_empty(), true, "testing discard_hand()");
+
+    println!("\n\n\n\tTEST SUCCESSFUL!");
+
+}
 
 

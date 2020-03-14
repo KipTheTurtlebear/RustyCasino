@@ -134,16 +134,7 @@ pub fn high_low() {
         Some(T) => T.unwrap(),
         None => "100".to_string(),
 
-    };*/
-    let mut vec_lines = vec![];
-    for line in reader.lines() {
-        vec_lines.push(line.unwrap());
-    }
-    let name = vec_lines[0].clone();
-
-    let chips = vec_lines[1].clone();
-};
-
+    };
 
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
@@ -162,19 +153,6 @@ pub fn high_low() {
         let mut deck: Deck = Deck::new_deck();
         deck.shuffle_deck();
 
-        //Draw and print card the player sees
-        let temp_card1 = deck.draw();
-        println!("The card is a ");
-        print_card(temp_card1);
-        display_single(temp_card1);
-
-        //Player chooses if it's higher or lower
-        while choice != 1 && choice != 2 {
-            println!(
-                "Do you think the next card will be higher or lower?\n1 = Higher, 2 = Lower\n"
-            );
-            choice = read!();
-
         let mut exceed = true;
         println!("You have: {} chips\n", player.1);
         while exceed {
@@ -186,28 +164,7 @@ pub fn high_low() {
             };
             if player.check_chips(bet) {exceed = false;}
         }
-        //returns true if numeric
-        /*
-        let is_num = bet.parse::<i32>().is_ok();
 
-        if is_num {
-            let check = player.check_chips(bet);
-
-        }
-        while !is_num || !check {
-            println!("You have: {} chips\n", player.1);
-            println!("Please enter a number less than your chip count:\n");
-            bet = read!();
-            //returns true if numeric
-            let is_num = bet;
-            if is_num {
-                let check = player.check_chips(bet);
-            }
-
-
-
-        }
-        */
         //subtract bet
         player.lose_chips(bet);
         //Deck of 52 cards created
@@ -228,8 +185,6 @@ pub fn high_low() {
                 choice = read!();
             }
 
-
-
             //Draw 2nd card
             let temp_card2 = deck.draw();
             println!("The card is a ");
@@ -244,8 +199,6 @@ pub fn high_low() {
             } else if get_value(temp_card2) == get_value(temp_card1) {
                 result = 3; //Card was the same
             }
-
-
 
             if choice == result {
                 println!("You win!");

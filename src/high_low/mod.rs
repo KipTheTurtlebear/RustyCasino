@@ -549,3 +549,57 @@ pub fn rdp_payout(hand: Vec<i32>, bet_amount: i32) -> i32 {
         }
     }
 }
+
+
+///function to test all test-able functions of Rusty Casino
+pub fn test(){
+
+    let _result: bool;
+    println!("Testing started");
+
+    let mut deck:Deck = Deck::new_deck();
+    assert_eq!(52, deck.len(), "Checking if the newly created deck has 52 cards");
+
+    println!("\n\tShowing unshuffled deck:");
+    deck.show_deck();
+    println!("\n\tShowing shuffled deck:");
+    deck.shuffle_deck();
+    deck.show_deck();
+
+    let mut empty_deck:Deck = Deck::empty_deck();
+    assert_eq!(empty_deck.is_empty(), true, "Checking if empty deck is empty");
+
+    let card = deck.draw();
+    //place card in empty deck
+    empty_deck.add_card(card);
+    assert_eq!(empty_deck.is_empty(), false, "make sure empty deck isnt empty anymore");
+
+
+    let mut player:Player = Player::new_player();
+    assert_eq!(true, player.0.is_empty(), "Check if new player is empty (it should be empty)");
+    println!("adding card to player's hand");
+    player.add_to_hand(deck.draw());
+    assert_eq!(false,  player.0.is_empty(), "Checking if player isn't empty (we added 1 card)");
+
+    player.set_name("Test".to_string());
+    assert_eq!("Test", player.2, "Testing set_name()");
+
+    player.add_chips(10);
+    assert_eq!(10, player.1, "testing add_chips()");
+
+    player.lose_chips(9);
+    assert_eq!(1, player.1, "testing lose_chips()");
+
+    player.discard_hand();
+    println!("emptying hand");
+    assert_eq!(player.0.is_empty(), true, "testing discard_hand()");
+
+    println!("\n\n\n\tTEST SUCCESSFUL!");
+
+}
+
+
+
+
+
+

@@ -68,6 +68,9 @@ pub fn rusty_casino() {
             high_low::war();
         } else if choice == 4 {
             high_low::red_dog_poker();
+        } else if choice == 0 {
+            high_low::test();
         }
     }
 }
+

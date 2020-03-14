@@ -32,13 +32,11 @@ impl Deck {
         self
     }
 
-    /*
-     //unused function
     /// Count the number of cards in the deck
     pub fn len(&self) -> usize {
         self.0.len()
     }
-    */
+
     /// Is this deck empty?
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
@@ -58,7 +56,6 @@ impl Deck {
         card
     }
 
-    /*
     ///displays every card and their corresponding suite
     pub fn show_deck(&self) {
         let deck = &self.0;
@@ -67,7 +64,6 @@ impl Deck {
             print_card(*card);
         }
     }
-    */
 }
 
 //had to move these functions out of the deck impl because they dont contain
@@ -293,3 +289,4 @@ pub fn display_cards(cards: &[i32]) {
         print!("|  ");
     }
 }
+

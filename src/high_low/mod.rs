@@ -1,8 +1,6 @@
 //high-low module
 mod deck;
 pub(crate) mod player;
-use std::cmp;
-use std::cmp::Ordering;
 use crate::high_low::deck::*;
 use crate::high_low::player::*;
 use std::cmp;
@@ -14,19 +12,16 @@ use std::io::{prelude::*, BufReader};
 use std::path::Path;
 use text_io::read;
 
-
-pub fn get_bet() -> i32{
-
+pub fn get_bet() -> i32 {
     let mut bet = 0;
     println!("How much would you like to bet?\n");
-    let input:String = read!();
-    let g = match input.parse::<i32>() {
-        Err(e) => println!("\n\nEnter a number less than or equal to your chip total\n"),
+    let input: String = read!();
+    match input.parse::<i32>() {
+        Err(_e) => println!("\n\nEnter a number less than or equal to your chip total\n"),
         Ok(f) => bet = f,
     };
     bet
 }
-
 
 //test to ensure this module linking stuff is working correctly
 pub fn high_low() {
@@ -47,7 +42,6 @@ pub fn high_low() {
     let chips = match iter.next() {
         Some(t) => t.unwrap(),
         None => "100".to_string(),
-
     };
 
     player.set_name(name);
@@ -61,14 +55,10 @@ pub fn high_low() {
 
     // Game Loop: Continues until player chooses to exit the game
     while game == 'y' {
-
-
-
         //Deck of 52 cards created
         //Shuffle new deck every new game
         let mut deck: Deck = Deck::new_deck();
         deck.shuffle_deck();
-
 
         let mut exceed = true;
         if player.1 == 0 {
@@ -78,11 +68,11 @@ pub fn high_low() {
         }
         println!("You have: {} chips\n", player.1);
         while exceed {
-
             bet = get_bet();
-            if player.check_chips(bet) && bet != 0 {exceed = false;}
+            if player.check_chips(bet) && bet != 0 {
+                exceed = false;
+            }
         }
-
 
         //subtract bet
         player.lose_chips(bet);
@@ -129,7 +119,6 @@ pub fn high_low() {
                 Ordering::Equal => result = 3,
             }
 
-
             if choice == result {
                 println!("You win!");
                 bet *= 2;
@@ -159,9 +148,7 @@ pub fn high_low() {
     write_file(player.2, player.1);
 }
 
-
 pub fn blackjack() {
-
     //create player
     let mut player: Player = Player::new_player();
     let path = Path::new("save.txt");
@@ -172,22 +159,20 @@ pub fn blackjack() {
     };
     let reader = BufReader::new(file);
     let mut iter = reader.lines();
-    let mut name = match iter.next() {
-        Some(T) => T.unwrap(),
+    let name = match iter.next() {
+        Some(t) => t.unwrap(),
         None => "Player".to_string(),
     };
     let chips = match iter.next() {
-        Some(T) => T.unwrap(),
+        Some(t) => t.unwrap(),
         None => "100".to_string(),
     };
 
     player.set_name(name);
     player.add_chips(chips.parse::<i32>().unwrap());
 
-    let mut choice = 0;
     let mut game: char = 'y';
-    let mut bet:i32 = 0;
-    let mut result = 0;
+    let mut bet: i32 = 0;
     println!("Blackjack game starting...\n");
 
     // Game Loop: Continues until player chooses to exit the game
@@ -203,7 +188,9 @@ pub fn blackjack() {
         println!("You have: {} chips\n", player.1);
         while exceed {
             bet = get_bet();
-            if player.check_chips(bet) && bet != 0 {exceed = false;}
+            if player.check_chips(bet) && bet != 0 {
+                exceed = false;
+            }
         }
 
         //subtract bet
@@ -212,7 +199,7 @@ pub fn blackjack() {
         //Deck of 52 cards created
         //Shuffle new deck every new game
         let mut deck: Deck = Deck::new_deck();
-        let mut hit: char = 'y';
+        let mut hit: char;
         deck.shuffle_deck();
 
         println!("Dealing...");
@@ -230,8 +217,8 @@ pub fn blackjack() {
         dealer.add_to_hand(deck.draw());
 
         if get_total(&player.0) == 21 && get_total(&dealer.0) != 21 {
-            println!("Blackjack! Congrats, you win {:?} chips!", bet*3);
-            player.add_chips(bet*3);
+            println!("Blackjack! Congrats, you win {:?} chips!", bet * 3);
+            player.add_chips(bet * 3);
         } else if get_total(&player.0) != 21 && get_total(&dealer.0) == 21 {
             println!("Dealer got blackjack! You lose!")
         } else {
@@ -241,7 +228,9 @@ pub fn blackjack() {
             while (get_total(&player.0) <= 21) && (hit == 'y') {
                 player.add_to_hand(deck.draw());
                 display_cards(&player.0);
-                if get_total(&player.0) > 21 {break}
+                if get_total(&player.0) > 21 {
+                    break;
+                }
                 println!("Want another card? y/n");
                 hit = read!();
             }
@@ -259,17 +248,19 @@ pub fn blackjack() {
                 }
                 println!("Dealer's final count is: {}", get_total(&dealer.0));
                 if get_total(&dealer.0) > 21 {
-                    println!("\nDealer busted, you win {:?} chips!\n", bet*2);
-                    player.add_chips(bet*2)
+                    println!("\nDealer busted, you win {:?} chips!\n", bet * 2);
+                    player.add_chips(bet * 2)
                 } else {
-                    if get_total(&player.0) > get_total(&dealer.0) {
-                        println!("\nYou win {:?} chips!\n", bet*2);
-                        player.add_chips(bet*2)
-                    } else if get_total(&player.0) < get_total(&dealer.0) {
-                        println!("\nYou lose!\n");
-                    } else {
-                        println!("\nIt's a tie! You get your chips back\n");
-                        player.add_chips(bet)
+                    match get_total(&player.0).cmp(&(get_total(&dealer.0))) {
+                        Ordering::Greater => {
+                            println!("\nYou win {:?} chips!\n", bet * 2);
+                            player.add_chips(bet * 2)
+                        }
+                        Ordering::Less => println!("\nYou lose!\n"),
+                        Ordering::Equal => {
+                            println!("\nIt's a tie! You get your chips back\n");
+                            player.add_chips(bet)
+                        }
                     }
                 }
             }
@@ -306,12 +297,12 @@ pub fn war() {
     };
     let reader = BufReader::new(file);
     let mut iter = reader.lines();
-    let mut name = match iter.next() {
-        Some(T) => T.unwrap(),
+    let name = match iter.next() {
+        Some(t) => t.unwrap(),
         None => "Player".to_string(),
     };
     let chips = match iter.next() {
-        Some(T) => T.unwrap(),
+        Some(t) => t.unwrap(),
         None => "100".to_string(),
     };
 
@@ -324,17 +315,12 @@ pub fn war() {
         dealer.add_to_hand(deck.draw());
     }
 
-
     //TODO: Have Reginald tell player the game is gonna start, and how it works
 
-
     //1 = dealer, 2 = player, 3 = tie
-    let mut winner = 3;
-    let mut choice = 0;
 
     //start game loop
     while game == 'y' {
-
         let mut exceed = true;
         if player.1 == 0 {
             println!("Oh wow, you're so poor, you have nothing. You poor, poor thing. Here's some pocket change.\n");
@@ -344,12 +330,13 @@ pub fn war() {
         println!("You have: {} chips\n", player.1);
         while exceed {
             bet = get_bet();
-            if player.check_chips(bet) && bet != 0 {exceed = false;}
+            if player.check_chips(bet) && bet != 0 {
+                exceed = false;
+            }
         }
 
         //subtract bet
         player.lose_chips(bet);
-
 
         //draw
         let mut d_card = dealer.draw();
@@ -357,12 +344,12 @@ pub fn war() {
 
         //determine winner
 
-        winner = war_winner(bet, d_card, p_card);
+        let mut winner = war_winner(d_card, p_card);
 
         while winner == 3 {
             //if tie keep looping,
-            player.lose_chips(bet_amount);
-            bet_amount += bet_amount;
+            player.lose_chips(bet);
+            bet += bet;
             //burn three cards
 
             dealer.draw();
@@ -372,23 +359,20 @@ pub fn war() {
             player.draw();
             player.draw();
 
-
             d_card = dealer.draw();
             p_card = dealer.draw();
 
-
-            winner = war_winner(bet, d_card, p_card);
+            winner = war_winner(d_card, p_card);
         }
 
         if winner == 1 {
             println!("You lose!");
         } else if winner == 2 {
             println!("You win {} chips!", bet * 2);
-            player.add_chips(bet*2);
+            player.add_chips(bet * 2);
         } else {
             println!("It's a tie!");
             player.add_chips(bet);
-
         }
 
         println!("\n\tYour Chips: {}", player.1);
@@ -508,7 +492,6 @@ pub fn red_dog_poker() {
 
         println!("You have: {} chips\n", player.1);
 
-
         if player.1 == 0 {
             println!("Oh wow, you're so poor, you have nothing. You poor, poor thing. Here's some pocket change.\n");
             println!("You've acquired 50 chips!");
@@ -610,16 +593,17 @@ pub fn rdp_payout(hand: Vec<i32>, bet_amount: i32) -> i32 {
     }
 }
 
-
-
 ///function to test all test-able functions of Rusty Casino
-pub fn test(){
-
+pub fn test() {
     let _result: bool;
     println!("Testing started");
 
-    let mut deck:Deck = Deck::new_deck();
-    assert_eq!(52, deck.len(), "Checking if the newly created deck has 52 cards");
+    let mut deck: Deck = Deck::new_deck();
+    assert_eq!(
+        52,
+        deck.len(),
+        "Checking if the newly created deck has 52 cards"
+    );
 
     println!("\n\tShowing unshuffled deck:");
     deck.show_deck();
@@ -627,20 +611,35 @@ pub fn test(){
     deck.shuffle_deck();
     deck.show_deck();
 
-    let mut empty_deck:Deck = Deck::empty_deck();
-    assert_eq!(empty_deck.is_empty(), true, "Checking if empty deck is empty");
+    let mut empty_deck: Deck = Deck::empty_deck();
+    assert_eq!(
+        empty_deck.is_empty(),
+        true,
+        "Checking if empty deck is empty"
+    );
 
     let card = deck.draw();
     //place card in empty deck
     empty_deck.add_card(card);
-    assert_eq!(empty_deck.is_empty(), false, "make sure empty deck isnt empty anymore");
+    assert_eq!(
+        empty_deck.is_empty(),
+        false,
+        "make sure empty deck isnt empty anymore"
+    );
 
-
-    let mut player:Player = Player::new_player();
-    assert_eq!(true, player.0.is_empty(), "Check if new player is empty (it should be empty)");
+    let mut player: Player = Player::new_player();
+    assert_eq!(
+        true,
+        player.0.is_empty(),
+        "Check if new player is empty (it should be empty)"
+    );
     println!("adding card to player's hand");
     player.add_to_hand(deck.draw());
-    assert_eq!(false,  player.0.is_empty(), "Checking if player isn't empty (we added 1 card)");
+    assert_eq!(
+        false,
+        player.0.is_empty(),
+        "Checking if player isn't empty (we added 1 card)"
+    );
 
     player.set_name("Test".to_string());
     assert_eq!("Test", player.2, "Testing set_name()");
@@ -656,7 +655,4 @@ pub fn test(){
     assert_eq!(player.0.is_empty(), true, "testing discard_hand()");
 
     println!("\n\n\n\tTEST SUCCESSFUL!");
-
 }
-
-

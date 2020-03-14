@@ -23,10 +23,6 @@ impl Player {
 
     ///Add card to player's hand
     pub fn add_to_hand(&mut self, card: i32) {
-
-
-
-
         //push to hand
         self.0.push(card);
     }
@@ -53,6 +49,12 @@ impl Player {
             //haven't found, so up the counter
             count += 1;
         }
+    }
+
+    pub fn draw(&mut self) -> i32 {
+        let a = self.0.pop();
+        let card: i32 = a.unwrap();
+        card
     }
 
     ///Discard hand

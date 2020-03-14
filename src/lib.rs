@@ -8,7 +8,6 @@ use crate::high_low::player::*;
 use text_io::read;
 
 pub fn rusty_casino() {
-
     let mut choice = 0;
     println!("\n\n\n\n");
     println!("████████╗██╗  ██╗███████╗    ██████╗ ██╗   ██╗███████╗████████╗██╗   ██╗     ██████╗ █████╗ ███████╗██╗███╗   ██╗ ██████╗ ");
@@ -75,4 +74,3 @@ pub fn rusty_casino() {
         }
     }
 }
-

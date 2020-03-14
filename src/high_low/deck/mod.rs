@@ -88,7 +88,6 @@ pub fn get_total(deck: &[i32]) -> i32 {
     total
 }
 
-
 ///Returns the card's number value - Faces = 10
 pub fn get_bj_value(card: i32) -> i32 {
     //let value = card;
@@ -239,7 +238,6 @@ pub fn print_value(card: i32) {
     }
 }
 
-
 ///displays a single card
 pub fn display_single(card: i32) {
     print!("|");
@@ -291,4 +289,3 @@ pub fn display_cards(cards: &[i32]) {
         print!("|  ");
     }
 }
-
